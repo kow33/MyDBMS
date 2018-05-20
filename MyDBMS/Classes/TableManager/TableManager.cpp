@@ -46,7 +46,7 @@ bool TableManager::isCurTableSet() {
 }
 
 void TableManager::saveTable(string dbName) {
-    string path = "/Users/mihailkocetkov/C++/MySUBD/MySUBD/Databases/";
+    string path = "/Users/mihailkocetkov/C++/MySUBD/MyDBMS/Databases/";
     path += dbName + "/";
     fstream file(path + _curTable->getTableName() + ".csv", ios::out | ios::trunc);
     

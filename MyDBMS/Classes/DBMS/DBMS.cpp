@@ -197,7 +197,7 @@ void DBMS::run() {
 }
 
 void DBMS::readDBs() {
-    string path = "/Users/mihailkocetkov/C++/MySUBD/MySUBD/Databases/";
+    string path = "/Users/mihailkocetkov/C++/MySUBD/MyDBMS/Databases/";
     
     fstream file(path + "Databases.txt", ios::in);
     
@@ -214,7 +214,7 @@ void DBMS::readDBs() {
 }
 
 void DBMS::saveDBs() {
-    string path = "/Users/mihailkocetkov/C++/MySUBD/MySUBD/Databases/";
+    string path = "/Users/mihailkocetkov/C++/MySUBD/MyDBMS/Databases/";
     
     fstream file(path + "Databases.txt", ios::out | ios::trunc);
     
@@ -241,8 +241,8 @@ void DBMS::useDB(string dbName) {
 void DBMS::createDB(string dbName) {
     _dbList.insert(pair<string, Database*>(dbName, new Database(dbName)));
     
-    string command1 = "mkdir /Users/mihailkocetkov/C++/MySUBD/MySUBD/Databases/" + dbName;
-    string command2 = "touch /Users/mihailkocetkov/C++/MySUBD/MySUBD/Databases/" + dbName + "/";
+    string command1 = "mkdir /Users/mihailkocetkov/C++/MySUBD/MyDBMS/Databases/" + dbName;
+    string command2 = "touch /Users/mihailkocetkov/C++/MySUBD/MyDBMS/Databases/" + dbName + "/";
     command2 += "tables.txt";
     system(command1.c_str());
     system(command2.c_str());
@@ -257,7 +257,7 @@ void DBMS::deleteDB(string dbName) {
     delete _dbList[dbName];
     _dbList.erase(dbName);
     
-    string command = "rm -R /Users/mihailkocetkov/C++/MySUBD/MySUBD/Databases/" + dbName;
+    string command = "rm -R /Users/mihailkocetkov/C++/MySUBD/MyDBMS/Databases/" + dbName;
     system(command.c_str());
     
     saveDBs();
