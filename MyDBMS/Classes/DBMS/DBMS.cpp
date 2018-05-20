@@ -91,7 +91,7 @@ void DBMS::run() {
             for (int i = 0; i < countOfCols; i++) {
                 Column col;
                 string colType;
-                cout << "Column 1" << endl;
+                cout << "Column " << i + 1 << endl;
                 cout << "Enter column name: ";
                 cin >> col._colName;
                 cout << "Enter column type(Int, Double, String, Date): ";
@@ -115,16 +115,7 @@ void DBMS::run() {
             vector<string> tableRows = _curDB->_tm.select();
             cout << "Table " << _curDB->_tm.getCurTableName() << ":" << endl;
             vector<string> colNameList = _curDB->_tm.getCurTableColNames();
-            for (int i = 0; i < colNameList.size(); i++) {
-                cout << colNameList[i];
-                if (i != colNameList.size() - 1) {
-                    cout << "|";
-                }
-            }
-            cout << endl;
-            for (auto temp : tableRows) {
-                cout << temp << endl;
-            }
+            drawTable(colNameList, tableRows);
         } else if (answer == 10) {
             string colName;
             string equalTo;
@@ -136,27 +127,19 @@ void DBMS::run() {
             cin >> equalTo;
             
             vector<string> colNameList = _curDB->_tm.getCurTableColNames();
-            for (int i = 0; i < colNameList.size(); i++) {
-                cout << colNameList[i];
-                if (i != colNameList.size() - 1) {
-                    cout << "|";
-                }
-            }
-            cout << endl;
             vector<string> tableRows = _curDB->_tm.selectWhere(colName, equalTo);
-            for (auto temp : tableRows) {
-                cout << temp << endl;
-            }
+            drawTable(colNameList, tableRows);
         } else if (answer == 11) {
             string colName;
             
             cout << "Enter column name: ";
             cin >> colName;
-            
+        
+            vector<string> nameOfCol;
+            nameOfCol.push_back(colName);
             vector<string> column = _curDB->_tm.selectColumn(colName);
-            for (auto temp : column) {
-                cout << temp << endl;
-            }
+            drawTable(nameOfCol, column);
+            
         } else if (answer == 12) {
             vector<string> row;
             vector<string> colNameList = _curDB->_tm.getCurTableColNames();
@@ -286,4 +269,84 @@ void printManualTable() {
     cout << "|\t\t13 - clear table.\t\t\t\t|\t\t14 - delete rows with condition.\t\t|" << endl;
     cout << "+———————————————————————————————————————————————————————————————————————————————————————+" << endl;
     cout << endl;
+}
+
+void drawTable(vector<string> header, vector<string> data) {
+    auto splitString = [](string str) -> vector<string> {
+        vector<string> splitedStr;
+        string tempStr = "";
+        
+        for (int i = 0; i < str.length(); i++) {
+            if (str[i] == '|') {
+                splitedStr.push_back(tempStr);
+                tempStr = "";
+                continue;
+            }
+            tempStr += str[i];
+        }
+        splitedStr.push_back(tempStr);
+        
+        return splitedStr;
+    };
+    
+    auto drawLine = [](vector<int> maxColWidth) {
+        cout << "+—";
+        for (int i = 0; i < maxColWidth.size(); i++) {
+            for (int j = 0; j < maxColWidth[i] ; j++) {
+                cout << "—";
+            }
+            if (i != maxColWidth.size() - 1) {
+                cout << "—+—";
+            }
+        }
+        cout << "—+";
+        cout << endl;
+    };
+    
+    auto drawTable = [drawLine](vector<string> header, vector<vector<string>> data) {
+        int countOfCols = int(header.size());
+        vector<int> maxSizeInCol;
+        for (int i = 0; i < countOfCols; i++) {
+            int len = -1;
+            for (int j = 0; j < data.size(); j++) {
+                if (int(data[j][i].length()) > len) {
+                    len = int(data[j][i].length());
+                }
+            }
+            maxSizeInCol.emplace_back(len);
+        }
+        for (int i = 0; i < countOfCols; i++) {
+            if (int(header[i].length()) > maxSizeInCol[i]) {
+                maxSizeInCol[i] = int(header[i].length());
+            }
+        }
+        
+        drawLine(maxSizeInCol);
+        cout << "|";
+        for (int i = 0; i < countOfCols; i++) {
+            cout << " ";
+            cout << setfill(' ') << setw(maxSizeInCol[i]) << header[i];
+            cout << " |";
+        }
+        cout << endl;
+        drawLine(maxSizeInCol);
+        for (int i = 0; i < data.size(); i++) {
+            cout << "|";
+            for (int j = 0; j < countOfCols; j++) {
+                cout << " ";
+                cout << setfill(' ') << setw(maxSizeInCol[j]) << data[i][j];
+                cout << " |";
+            }
+            cout << endl;
+        }
+        drawLine(maxSizeInCol);
+    };
+    
+    vector<vector<string>> splitedData;
+    
+    for (int i = 0; i < data.size(); i++) {
+        splitedData.push_back(splitString(data[i]));
+    }
+    
+    drawTable(header, splitedData);
 }

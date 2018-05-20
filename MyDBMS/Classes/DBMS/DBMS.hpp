@@ -14,6 +14,7 @@
 #include <map>
 #include <string>
 #include <fstream>
+#include <iomanip>
 
 #include "Database.hpp"
 
@@ -39,4 +40,5 @@ public:
 };
 
 void printManualTable();
+void drawTable(vector<string> header, vector<string> data);
 #endif /* DBMS_hpp */
