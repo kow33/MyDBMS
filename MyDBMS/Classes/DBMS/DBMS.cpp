@@ -225,6 +225,9 @@ void DBMS::useDB(string dbName) {
 }
 
 void DBMS::createDB(string dbName) {
+    if (_dbList.find(dbName) != _dbList.end()) {
+        return;
+    }
     _dbList.insert(pair<string, Database*>(dbName, new Database(dbName)));
     
     string command1 = "mkdir /Users/mihailkocetkov/C++/MySUBD/MyDBMS/Databases/" + dbName;

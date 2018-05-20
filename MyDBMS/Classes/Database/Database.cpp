@@ -51,6 +51,9 @@ vector<string> Database::showTables() {
 }
 
 void Database::createTable(string tableName, string primaryKey, Header head) {
+    if (_tables.find(tableName) != _tables.end()) {
+        return;
+    }
     _tables.insert(pair<string, DBTable*>(tableName, new DBTable(tableName, primaryKey, head)));
     writeTableListFile();
 }
