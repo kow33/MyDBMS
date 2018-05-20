@@ -218,6 +218,9 @@ vector<string> DBMS::showDBs() {
 }
 
 void DBMS::useDB(string dbName) {
+    if (_dbList.find(dbName) == _dbList.end() || (_curDB != nullptr && _curDB->getDBName() == dbName)) {
+        return;
+    }
     _curDB = _dbList[dbName];
 }
 

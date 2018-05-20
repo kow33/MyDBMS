@@ -28,6 +28,9 @@ string Database::getDBName() {
 }
 
 void Database::useTable(string curTableName) {
+    if (_tables.find(curTableName) == _tables.end() || (_tm.isCurTableSet() && _tm.getCurTableName() == curTableName)) {
+        return;
+    }
     if (_tm.isCurTableSet()) {
         _tm.saveTable(_dbName);
     }
