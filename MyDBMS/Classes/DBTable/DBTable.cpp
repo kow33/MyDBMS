@@ -269,10 +269,6 @@ void DBTable::removeRowsWhere(string colName, void *equalTo) {
         }
     }
     
-    if (columnIndex == -1) {
-        return;
-    }
-    
     for (int i = 0; i < _data.size(); i++) {
         switch (columnType) {
             case _INT:

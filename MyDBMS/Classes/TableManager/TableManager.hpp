@@ -40,9 +40,9 @@ public:
     vector<string> selectWhere(string colName, string equalTo);
     vector<string> selectColumn(string colName);
     
-    bool insertRow(vector<string> row);
-    bool deleteRows();
-    bool deleteRowWhere(string colName, string equalTo);
+    void insertRow(vector<string> row);
+    void deleteRows();
+    void deleteRowWhere(string colName, string equalTo);
 };
 
 #endif /* TableManager_hpp */

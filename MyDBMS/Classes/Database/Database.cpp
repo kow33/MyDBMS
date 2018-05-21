@@ -28,7 +28,12 @@ string Database::getDBName() {
 }
 
 void Database::useTable(string curTableName) {
-    if (_tables.find(curTableName) == _tables.end() || (_tm.isCurTableSet() && _tm.getCurTableName() == curTableName)) {
+    if (_tables.find(curTableName) == _tables.end()) {
+        throw string("table with this name not exist");
+        return;
+    }
+    if (_tm.isCurTableSet() && _tm.getCurTableName() == curTableName) {
+        throw string("table with this name already in use");
         return;
     }
     if (_tm.isCurTableSet()) {
@@ -52,6 +57,7 @@ vector<string> Database::showTables() {
 
 void Database::createTable(string tableName, string primaryKey, Header head) {
     if (_tables.find(tableName) != _tables.end()) {
+        throw string("table with this name already exist");
         return;
     }
     _tables.insert(pair<string, DBTable*>(tableName, new DBTable(tableName, primaryKey, head)));
@@ -59,6 +65,10 @@ void Database::createTable(string tableName, string primaryKey, Header head) {
 }
 
 void Database::removeTable(string tableName) {
+    if (_tables.find(tableName) == _tables.end()) {
+        throw string("table with this name not exist");
+        return;
+    }
     if (_tm.getCurTableName() == tableName) {
         _tm.setCurTable(nullptr);
     }

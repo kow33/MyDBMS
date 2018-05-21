@@ -24,7 +24,8 @@ void DBMS::run() {
     bool check = true;
     printManualTable();
     while (check) {
-        int answer = -1;
+        string strAns;
+        int ans;
         
         cout << ">";
         if (_curDB != nullptr) {
@@ -35,47 +36,69 @@ void DBMS::run() {
         }
         cout << " ";
         
-        cin >> answer;
-        if (answer == -1) {
+        cin >> strAns;
+        if (strAns == "\\h") {
             printManualTable();
-        } else if (answer == 0) {
+            continue;
+        }
+        if (strAns == "\\q") {
             cout << "Bye" << endl;
             check = false;
-        } else if (answer == 1) {
+            continue;
+        }
+        
+        ans = stoi(strAns);
+        if (ans == 1) {
             vector<string> dbList = showDBs();
             cout << "Databases:" << endl;
             for (auto dbName : dbList) {
                 cout << dbName << endl;
             }
-        } else if (answer == 2) {
+        } else if (ans == 2) {
             string dbName;
             cout << "Enter name of database: ";
             cin >> dbName;
-            useDB(dbName);
-        } else if (answer == 3) {
+            try {
+                useDB(dbName);
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans == 3) {
             string dbName;
             cout << "Enter name of database: ";
             cin >> dbName;
-            createDB(dbName);
-        } else if (answer == 4) {
+            try {
+                createDB(dbName);
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans == 4) {
             string dbName;
             cout << "Enter name of database: ";
             cin >> dbName;
-            deleteDB(dbName);
-        } else if (answer > 4 && _curDB == nullptr) {
-            cout << "Please, take database in use" << endl;
-        } else if (answer == 5) {
+            try {
+                deleteDB(dbName);
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans > 4 && _curDB == nullptr) {
+            cerr << "Please, take database in use" << endl;
+        } else if (ans == 5) {
             vector<string> tableList = _curDB->showTables();
             cout << "Tables: " << endl;
             for (auto tableName : tableList) {
                 cout << tableName << endl;
             }
-        } else if (answer == 6) {
+        } else if (ans == 6) {
             string curTableName;
             cout << "Enter table name: ";
             cin >> curTableName;
-            _curDB->useTable(curTableName);
-        } else if (answer == 7) {
+            try {
+                _curDB->useTable(curTableName);
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans == 7) {
             string tableName;
             string primaryKey;
             Header head;
@@ -103,20 +126,29 @@ void DBMS::run() {
             cout << "Enter name of primary key: ";
             cin >> primaryKey;
             
-            _curDB->createTable(tableName, primaryKey, head);
-        } else if (answer == 8) {
+            try {
+                _curDB->createTable(tableName, primaryKey, head);
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans == 8) {
             string tableName;
             cout << "Enter table name: ";
             cin >> tableName;
-            _curDB->removeTable(tableName);
-        } else if (answer > 8 && !_curDB->_tm.isCurTableSet()) {
-            cout << "Please, take table in use" << endl;
-        } else if (answer == 9) {
+            try {
+                _curDB->removeTable(tableName);
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans > 8 && !_curDB->_tm.isCurTableSet()) {
+            cerr << "Please, take table in use" << endl;
+        } else if (ans == 9) {
             vector<string> tableRows = _curDB->_tm.select();
             cout << "Table " << _curDB->_tm.getCurTableName() << ":" << endl;
             vector<string> colNameList = _curDB->_tm.getCurTableColNames();
+            
             drawTable(colNameList, tableRows);
-        } else if (answer == 10) {
+        } else if (ans == 10) {
             string colName;
             string equalTo;
             
@@ -126,10 +158,14 @@ void DBMS::run() {
             cout << "Enter equal value: ";
             cin >> equalTo;
             
-            vector<string> colNameList = _curDB->_tm.getCurTableColNames();
-            vector<string> tableRows = _curDB->_tm.selectWhere(colName, equalTo);
-            drawTable(colNameList, tableRows);
-        } else if (answer == 11) {
+            try {
+                vector<string> colNameList = _curDB->_tm.getCurTableColNames();
+                vector<string> tableRows = _curDB->_tm.selectWhere(colName, equalTo);
+                drawTable(colNameList, tableRows);
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans == 11) {
             string colName;
             
             cout << "Enter column name: ";
@@ -137,10 +173,16 @@ void DBMS::run() {
         
             vector<string> nameOfCol;
             nameOfCol.push_back(colName);
-            vector<string> column = _curDB->_tm.selectColumn(colName);
-            drawTable(nameOfCol, column);
+            try {
+                vector<string> nameOfCol;
+                nameOfCol.push_back(colName);
+                vector<string> column = _curDB->_tm.selectColumn(colName);
+                drawTable(nameOfCol, column);
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
             
-        } else if (answer == 12) {
+        } else if (ans == 12) {
             vector<string> row;
             vector<string> colNameList = _curDB->_tm.getCurTableColNames();
             cout << "Enter data:" << endl;
@@ -151,14 +193,15 @@ void DBMS::run() {
                 row.emplace_back(answer);
             }
             
-            _curDB->_tm.insertRow(row);
-        } else if (answer == 13) {
-            if (_curDB->_tm.deleteRows()) {
-                cout << "Success!" << endl;
-            } else {
-                cout << "Some error, try again" << endl;
+            try {
+                _curDB->_tm.insertRow(row);
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
             }
-        } else if (answer == 14) {
+        } else if (ans == 13) {
+            _curDB->_tm.deleteRows();
+            cout << "Success!" << endl;
+        } else if (ans == 14) {
             string colName;
             string equalTo;
             
@@ -168,10 +211,11 @@ void DBMS::run() {
             cout << "Enter equal value: ";
             cin >> equalTo;
             
-            if (_curDB->_tm.deleteRowWhere(colName, equalTo)) {
+            try {
+                _curDB->_tm.deleteRowWhere(colName, equalTo);
                 cout << "Success!" << endl;
-            } else {
-                cout << "Some error, try again" << endl;
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
             }
         }
         
@@ -218,7 +262,12 @@ vector<string> DBMS::showDBs() {
 }
 
 void DBMS::useDB(string dbName) {
-    if (_dbList.find(dbName) == _dbList.end() || (_curDB != nullptr && _curDB->getDBName() == dbName)) {
+    if (_dbList.find(dbName) == _dbList.end()) {
+        throw string("database with this name not exist");
+        return;
+    }
+    if (_curDB != nullptr && _curDB->getDBName() == dbName) {
+        throw string("database with this name already in use");
         return;
     }
     _curDB = _dbList[dbName];
@@ -226,6 +275,7 @@ void DBMS::useDB(string dbName) {
 
 void DBMS::createDB(string dbName) {
     if (_dbList.find(dbName) != _dbList.end()) {
+        throw string("database with this name alredy exist");
         return;
     }
     _dbList.insert(pair<string, Database*>(dbName, new Database(dbName)));
@@ -240,6 +290,10 @@ void DBMS::createDB(string dbName) {
 }
 
 void DBMS::deleteDB(string dbName) {
+    if (_dbList.find(dbName) == _dbList.end()) {
+        throw string("database with this name not exist");
+        return;
+    }
     if (_curDB != nullptr && _curDB->getDBName() == dbName) {
         _curDB = nullptr;
     }
@@ -257,7 +311,7 @@ void printManualTable() {
     cout << "+———————————————————————————————————————————————————————————————————————————————+" << endl;
     cout << "|\t\t1 - show list of databases.\t\t|\t\t2 - take database in use.\t\t|" << endl;
     cout << "|\t\t3 - create new database.\t\t|\t\t4 - delete database.\t\t\t|" << endl;
-    cout << "|\t\t0 - exit. \t\t\t\t\t\t|\t\t-1 - print help.\t\t\t\t|" << endl;
+    cout << "|\t\t\\q - exit. \t\t\t\t\t\t|\t\t\\h - print help.\t\t\t\t|" << endl;
     cout << "+———————————————————————————————————————————————————————————————————————————————+" << endl;
     cout << endl;
     

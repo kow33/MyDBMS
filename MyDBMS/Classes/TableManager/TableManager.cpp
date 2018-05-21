@@ -75,10 +75,6 @@ void TableManager::saveTable(string dbName) {
 
 vector<string> TableManager::select() {
     vector<string> selectedRows;
-    if (_curTable == nullptr) {
-        selectedRows.push_back("No table in use");
-        return selectedRows;
-    }
     Header tableHead = _curTable->getHead();
     size_t headLen = tableHead.size();
     
@@ -123,10 +119,6 @@ vector<string> TableManager::select() {
 
 vector<string> TableManager::selectWhere(string colName, string equalTo) {
     vector<string> selectedRows;
-    if (_curTable == nullptr) {
-        selectedRows.push_back("No table in use");
-        return selectedRows;
-    }
     Header tableHead = _curTable->getHead();
     DBType colType = _NULL;
     size_t headLen = tableHead.size();
@@ -140,7 +132,7 @@ vector<string> TableManager::selectWhere(string colName, string equalTo) {
     }
     
     if (!isRealCol) {
-        selectedRows.push_back("Error column name");
+        throw string("column with this name not exist");
         return selectedRows;
     }
     
@@ -165,7 +157,7 @@ vector<string> TableManager::selectWhere(string colName, string equalTo) {
     vector<vector<void*>> tempSelectedRows = _curTable->getRowsWhere(colName, p_equalTo);
     
     if (tempSelectedRows.size() == 0) {
-        selectedRows.push_back("No row with this parametr");
+        throw string("no row with this parameter");
         return selectedRows;
     }
     
@@ -210,11 +202,6 @@ vector<string> TableManager::selectWhere(string colName, string equalTo) {
 
 vector<string> TableManager::selectColumn(string colName) {
     vector<string> selectedElems;
-    if (_curTable == nullptr) {
-        selectedElems.push_back("No table in use");
-        return selectedElems;
-    }
-    
     Header tableHead = _curTable->getHead();
     DBType colType = _NULL;
     
@@ -225,7 +212,7 @@ vector<string> TableManager::selectColumn(string colName) {
     }
     
     if (colType == _NULL) {
-        selectedElems.push_back("Error column name");
+        throw string("column with this name not exist");
         return selectedElems;
     }
     
@@ -253,15 +240,12 @@ vector<string> TableManager::selectColumn(string colName) {
     return selectedElems;
 }
 
-bool TableManager::insertRow(vector<string> row) {
-    if (_curTable == nullptr) {
-        return false;
-    }
-
+void TableManager::insertRow(vector<string> row) {
     Header tableHead = _curTable->getHead();
     
     if (row.size() != tableHead.size()) {
-        return false;
+        throw string("incorrect number of row elements");
+        return;
     }
     
     vector<void*> tempRow;
@@ -285,23 +269,13 @@ bool TableManager::insertRow(vector<string> row) {
         }
     }
     _curTable->insertRow(tempRow);
-    
-    return true;
 }
 
-bool TableManager::deleteRows() {
-    if (_curTable == nullptr) {
-        return false;
-    }
+void TableManager::deleteRows() {
     _curTable->removeRows();
-    
-    return true;
 }
 
-bool TableManager::deleteRowWhere(string colName, string equalTo) {
-    if (_curTable == nullptr) {
-        return false;
-    }
+void TableManager::deleteRowWhere(string colName, string equalTo) {
     Header tableHead = _curTable->getHead();
     DBType colType = _NULL;
     bool isRealCol = false;
@@ -314,7 +288,8 @@ bool TableManager::deleteRowWhere(string colName, string equalTo) {
     }
     
     if (!isRealCol) {
-        return false;
+        throw string("column with this name not exist");
+        return;
     }
     
     void *p_equalTo = nullptr;
@@ -337,6 +312,4 @@ bool TableManager::deleteRowWhere(string colName, string equalTo) {
     }
 
     _curTable->removeRowsWhere(colName, p_equalTo);
-    
-    return true;
 }
