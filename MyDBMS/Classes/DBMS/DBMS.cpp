@@ -51,9 +51,7 @@ void DBMS::run() {
         if (ans == 1) {
             vector<string> dbList = showDBs();
             cout << "Databases:" << endl;
-            for (auto dbName : dbList) {
-                cout << dbName << endl;
-            }
+            drawTable(vector<string>(), dbList, left, true);
         } else if (ans == 2) {
             string dbName;
             cout << "Enter name of database: ";
@@ -86,9 +84,7 @@ void DBMS::run() {
         } else if (ans == 5) {
             vector<string> tableList = _curDB->showTables();
             cout << "Tables: " << endl;
-            for (auto tableName : tableList) {
-                cout << tableName << endl;
-            }
+            drawTable(vector<string>(), tableList, left, true);
         } else if (ans == 6) {
             string curTableName;
             cout << "Enter table name: ";
@@ -307,31 +303,54 @@ void DBMS::deleteDB(string dbName) {
 }
 
 void printManualTable() {
+    vector<string> globalControlTableData = {
+        "1 - show list of databases|2 - take database in use",
+        "3 - create new database|4 - delete database",
+        "\\q - exit|\\h - print help"
+    };
+    vector<string> databaseControlTableData = {
+        "5 - show list of table|6 - take table in use",
+        "7 - create new table|8 - delete table"
+    };
+    vector<string> tableControlTableData = {
+        "9 - show all table's rows|10 - show rows with condition",
+        "11 - show column of table|12 - insert row in table",
+        "13 - clear table|14 - delete rows with condition"
+    };
     cout << "Press(Global control):" << endl;
-    cout << "+———————————————————————————————————————————————————————————————————————————————+" << endl;
-    cout << "|\t\t1 - show list of databases.\t\t|\t\t2 - take database in use.\t\t|" << endl;
-    cout << "|\t\t3 - create new database.\t\t|\t\t4 - delete database.\t\t\t|" << endl;
-    cout << "|\t\t\\q - exit. \t\t\t\t\t\t|\t\t\\h - print help.\t\t\t\t|" << endl;
-    cout << "+———————————————————————————————————————————————————————————————————————————————+" << endl;
+    drawTable(vector<string>(), globalControlTableData, left, true);
     cout << endl;
     
     cout << "Press(Database control if it in use):" << endl;
-    cout << "+———————————————————————————————————————————————————————————————————————+" << endl;
-    cout << "|\t\t5 - show list of table.\t\t|\t\t6 - take table in use.\t\t|" << endl;
-    cout << "|\t\t7 - create new table.\t\t|\t\t8 - delete table.\t\t\t|" << endl;
-    cout << "+———————————————————————————————————————————————————————————————————————+" << endl;
+    drawTable(vector<string>(), databaseControlTableData, left, true);
     cout << endl;
     
     cout << "Press(Table control if it in use):" << endl;
-    cout << "+———————————————————————————————————————————————————————————————————————————————————————+" << endl;
-    cout << "|\t\t9 - show all table's rows.\t\t|\t\t10 - show rows with condition.\t\t\t|" << endl;
-    cout << "|\t\t11 - show column of table.\t\t|\t\t12 - insert row in table.\t\t\t\t|" << endl;
-    cout << "|\t\t13 - clear table.\t\t\t\t|\t\t14 - delete rows with condition.\t\t|" << endl;
-    cout << "+———————————————————————————————————————————————————————————————————————————————————————+" << endl;
+    drawTable(vector<string>(), tableControlTableData, left, true);
     cout << endl;
+    
+//    cout << "+———————————————————————————————————————————————————————————————————————————————+" << endl;
+//    cout << "|\t\t1 - show list of databases.\t\t|\t\t2 - take database in use.\t\t|" << endl;
+//    cout << "|\t\t3 - create new database.\t\t|\t\t4 - delete database.\t\t\t|" << endl;
+//    cout << "|\t\t\\q - exit. \t\t\t\t\t\t|\t\t\\h - print help.\t\t\t\t|" << endl;
+//    cout << "+———————————————————————————————————————————————————————————————————————————————+" << endl;
+//    cout << endl;
+    
+//    cout << "+———————————————————————————————————————————————————————————————————————+" << endl;
+//    cout << "|\t\t5 - show list of table.\t\t|\t\t6 - take table in use.\t\t|" << endl;
+//    cout << "|\t\t7 - create new table.\t\t|\t\t8 - delete table.\t\t\t|" << endl;
+//    cout << "+———————————————————————————————————————————————————————————————————————+" << endl;
+//    cout << endl;
+    
+//    cout << "+———————————————————————————————————————————————————————————————————————————————————————+" << endl;
+//    cout << "|\t\t9 - show all table's rows.\t\t|\t\t10 - show rows with condition.\t\t\t|" << endl;
+//    cout << "|\t\t11 - show column of table.\t\t|\t\t12 - insert row in table.\t\t\t\t|" << endl;
+//    cout << "|\t\t13 - clear table.\t\t\t\t|\t\t14 - delete rows with condition.\t\t|" << endl;
+//    cout << "+———————————————————————————————————————————————————————————————————————————————————————+" << endl;
+//    cout << endl;
 }
 
-void drawTable(vector<string> header, vector<string> data) {
+void drawTable(vector<string> header, vector<string> data, ios_base &oriented(ios_base &), bool isRowsDelimOn) {
     auto splitString = [](string str) -> vector<string> {
         vector<string> splitedStr;
         string tempStr = "";
@@ -363,8 +382,15 @@ void drawTable(vector<string> header, vector<string> data) {
         cout << endl;
     };
     
-    auto drawTable = [drawLine](vector<string> header, vector<vector<string>> data) {
-        int countOfCols = int(header.size());
+    auto drawTable = [drawLine, oriented, isRowsDelimOn](vector<string> header, vector<vector<string>> data) {
+        int countOfCols;
+        bool isHeaderOn = true;
+        if (int(header.size()) != 0) {
+            countOfCols = int(header.size());
+        } else {
+            isHeaderOn = false;
+            countOfCols = int(data[0].size());
+        }
         vector<int> maxSizeInCol;
         for (int i = 0; i < countOfCols; i++) {
             int len = -1;
@@ -375,29 +401,36 @@ void drawTable(vector<string> header, vector<string> data) {
             }
             maxSizeInCol.emplace_back(len);
         }
-        for (int i = 0; i < countOfCols; i++) {
-            if (int(header[i].length()) > maxSizeInCol[i]) {
-                maxSizeInCol[i] = int(header[i].length());
+        if (isHeaderOn) {
+            for (int i = 0; i < countOfCols; i++) {
+                if (int(header[i].length()) > maxSizeInCol[i]) {
+                    maxSizeInCol[i] = int(header[i].length());
+                }
             }
+            
+            
+            drawLine(maxSizeInCol);
+            cout << "|";
+            for (int i = 0; i < countOfCols; i++) {
+                cout << " ";
+                cout << setfill(' ') << oriented << setw(maxSizeInCol[i]) << header[i];
+                cout << " |";
+            }
+            cout << endl;
         }
-        
-        drawLine(maxSizeInCol);
-        cout << "|";
-        for (int i = 0; i < countOfCols; i++) {
-            cout << " ";
-            cout << setfill(' ') << setw(maxSizeInCol[i]) << header[i];
-            cout << " |";
-        }
-        cout << endl;
+
         drawLine(maxSizeInCol);
         for (int i = 0; i < data.size(); i++) {
             cout << "|";
             for (int j = 0; j < countOfCols; j++) {
                 cout << " ";
-                cout << setfill(' ') << setw(maxSizeInCol[j]) << data[i][j];
+                cout << setfill(' ') << oriented << setw(maxSizeInCol[j]) << data[i][j];
                 cout << " |";
             }
             cout << endl;
+            if (isRowsDelimOn && i != data.size() - 1) {
+                drawLine(maxSizeInCol);
+            }
         }
         drawLine(maxSizeInCol);
     };

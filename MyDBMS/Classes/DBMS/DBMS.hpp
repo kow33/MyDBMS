@@ -40,5 +40,5 @@ public:
 };
 
 void printManualTable();
-void drawTable(vector<string> header, vector<string> data);
+void drawTable(vector<string> header, vector<string> data, ios_base &oriented(ios_base &) = right,  bool isRowsDelimOn = false);
 #endif /* DBMS_hpp */
