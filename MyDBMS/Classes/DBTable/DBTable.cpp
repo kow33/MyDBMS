@@ -269,7 +269,7 @@ void DBTable::removeRowsWhere(string colName, void *equalTo) {
         }
     }
     
-    for (int i = 0; i < _data.size(); i++) {
+    for (int i = int(_data.size()) - 1; i >= 0; i--) {
         switch (columnType) {
             case _INT:
                 if (*static_cast<int*>(_data[i][columnIndex]) == *static_cast<int*>(equalTo)) {

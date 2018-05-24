@@ -49,9 +49,13 @@ void DBMS::run() {
         
         ans = stoi(strAns);
         if (ans == 1) {
-            vector<string> dbList = showDBs();
-            cout << "Databases:" << endl;
-            drawTable(vector<string>(), dbList, left, true);
+            try {
+                vector<string> dbList = showDBs();
+                cout << "Databases:" << endl;
+                drawTable(vector<string>(), dbList, left, true);
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
         } else if (ans == 2) {
             string dbName;
             cout << "Enter name of database: ";
@@ -82,9 +86,13 @@ void DBMS::run() {
         } else if (ans > 4 && _curDB == nullptr) {
             cerr << "Please, take database in use" << endl;
         } else if (ans == 5) {
-            vector<string> tableList = _curDB->showTables();
-            cout << "Tables: " << endl;
-            drawTable(vector<string>(), tableList, left, true);
+            try {
+                vector<string> tableList = _curDB->showTables();
+                cout << "Tables: " << endl;
+                drawTable(vector<string>(), tableList, left, true);
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
         } else if (ans == 6) {
             string curTableName;
             cout << "Enter table name: ";
@@ -139,11 +147,15 @@ void DBMS::run() {
         } else if (ans > 8 && !_curDB->_tm.isCurTableSet()) {
             cerr << "Please, take table in use" << endl;
         } else if (ans == 9) {
-            vector<string> tableRows = _curDB->_tm.select();
-            cout << "Table " << _curDB->_tm.getCurTableName() << ":" << endl;
-            vector<string> colNameList = _curDB->_tm.getCurTableColNames();
-            
-            drawTable(colNameList, tableRows);
+            try {
+                vector<string> tableRows = _curDB->_tm.select();
+                cout << "Table " << _curDB->_tm.getCurTableName() << ":" << endl;
+                vector<string> colNameList = _curDB->_tm.getCurTableColNames();
+                
+                drawTable(colNameList, tableRows);
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
         } else if (ans == 10) {
             string colName;
             string equalTo;
@@ -208,7 +220,7 @@ void DBMS::run() {
             cin >> equalTo;
             
             try {
-                _curDB->_tm.deleteRowWhere(colName, equalTo);
+                _curDB->_tm.deleteRowsWhere(colName, equalTo);
                 cout << "Success!" << endl;
             } catch (string err) {
                 cerr << "Error: " << err << endl;
@@ -250,6 +262,10 @@ void DBMS::saveDBs() {
 
 vector<string> DBMS::showDBs() {
     vector<string> dbNameList;
+    if (_dbList.size() == 0) {
+        throw string("No databases yet");
+        return dbNameList;
+    }
     for (auto temp : _dbList) {
         dbNameList.push_back(temp.first);
     }

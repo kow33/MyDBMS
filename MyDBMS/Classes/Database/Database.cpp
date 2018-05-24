@@ -45,6 +45,7 @@ void Database::useTable(string curTableName) {
 vector<string> Database::showTables() {
     vector<string> tableNameList;
     if (_tables.size() == 0) {
+        throw string("No tables yet");
         return tableNameList;
     }
     

@@ -75,6 +75,12 @@ void TableManager::saveTable(string dbName) {
 
 vector<string> TableManager::select() {
     vector<string> selectedRows;
+    
+    if (_curTable->size() == 0) {
+        throw string("No data in table");
+        return selectedRows;
+    }
+    
     Header tableHead = _curTable->getHead();
     size_t headLen = tableHead.size();
     
@@ -275,7 +281,7 @@ void TableManager::deleteRows() {
     _curTable->removeRows();
 }
 
-void TableManager::deleteRowWhere(string colName, string equalTo) {
+void TableManager::deleteRowsWhere(string colName, string equalTo) {
     Header tableHead = _curTable->getHead();
     DBType colType = _NULL;
     bool isRealCol = false;

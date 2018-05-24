@@ -1,6 +1,5 @@
 Abonements|NoPrimaryKey
 BookID|Int|StudentID|Int|DateIn|Date|DateOut|Date
-1|1|10.10.2017|04.03.2018
 1|2|12.10.2017|04.03.2018
 2|1|20.11.2017|20.02.2018
 3|3|03.09.2017|21.02.2018

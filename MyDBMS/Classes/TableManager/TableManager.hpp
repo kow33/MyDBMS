@@ -42,7 +42,7 @@ public:
     
     void insertRow(vector<string> row);
     void deleteRows();
-    void deleteRowWhere(string colName, string equalTo);
+    void deleteRowsWhere(string colName, string equalTo);
 };
 
 #endif /* TableManager_hpp */
