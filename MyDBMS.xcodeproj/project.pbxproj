@@ -15,6 +15,7 @@
 		7473A30F203D8AC800A19359 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7473A30E203D8AC800A19359 /* main.cpp */; };
 		749C566820482F150045C16E /* DBDate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 749C566620482F150045C16E /* DBDate.cpp */; };
 		749E235520B0905800FB2397 /* DBMS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 749E235320B0905800FB2397 /* DBMS.cpp */; };
+		74EF403C20B876A1001E744E /* global_vars.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 74EF403B20B876A1001E744E /* global_vars.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -46,6 +47,7 @@
 		749C566620482F150045C16E /* DBDate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DBDate.cpp; sourceTree = "<group>"; };
 		749E235320B0905800FB2397 /* DBMS.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DBMS.cpp; sourceTree = "<group>"; };
 		749E235420B0905800FB2397 /* DBMS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DBMS.hpp; sourceTree = "<group>"; };
+		74EF403B20B876A1001E744E /* global_vars.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = global_vars.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,12 +135,12 @@
 			isa = PBXGroup;
 			children = (
 				7473A30E203D8AC800A19359 /* main.cpp */,
-				7473A319203D8B6A00A19359 /* Classes */,
+				7473A319203D8B6A00A19359 /* src */,
 			);
 			path = MyDBMS;
 			sourceTree = "<group>";
 		};
-		7473A319203D8B6A00A19359 /* Classes */ = {
+		7473A319203D8B6A00A19359 /* src */ = {
 			isa = PBXGroup;
 			children = (
 				749E235220B08FD400FB2397 /* DBMS */,
@@ -148,8 +150,9 @@
 				746612352093994000334A77 /* Column */,
 				746EB46C2090AB68001DFF0A /* DBTable */,
 				746EB46A2090AA1B001DFF0A /* DBDate */,
+				74EF403B20B876A1001E744E /* global_vars.cpp */,
 			);
-			path = Classes;
+			path = src;
 			sourceTree = "<group>";
 		};
 		749E235220B08FD400FB2397 /* DBMS */ = {
@@ -224,6 +227,7 @@
 				74661244209664D100334A77 /* Database.cpp in Sources */,
 				7466123C209399CB00334A77 /* Enums.cpp in Sources */,
 				7473A30F203D8AC800A19359 /* main.cpp in Sources */,
+				74EF403C20B876A1001E744E /* global_vars.cpp in Sources */,
 				746612382093995A00334A77 /* Column.cpp in Sources */,
 				746EB46F2090ABA0001DFF0A /* DBTable.cpp in Sources */,
 			);
@@ -346,8 +350,8 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C3PS2L3PRF;
-				HEADER_SEARCH_PATHS = /usr/local/Cellar/boost/1.67.0_1/include;
-				LIBRARY_SEARCH_PATHS = /usr/local/Cellar/boost/1.67.0_1/lib;
+				HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -359,8 +363,8 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C3PS2L3PRF;
-				HEADER_SEARCH_PATHS = /usr/local/Cellar/boost/1.67.0_1/include;
-				LIBRARY_SEARCH_PATHS = /usr/local/Cellar/boost/1.67.0_1/lib;
+				HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

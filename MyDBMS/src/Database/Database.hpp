@@ -22,6 +22,8 @@
 
 using namespace std;
 
+extern string databasePath;
+
 class Database {
     string _dbName;
     map<string, DBTable*> _tables;

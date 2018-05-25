@@ -20,6 +20,8 @@
 
 using namespace std;
 
+extern string databasePath;
+
 class DBMS {
     map<string, Database*> _dbList;
     Database *_curDB;

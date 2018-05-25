@@ -78,14 +78,15 @@ void Database::removeTable(string tableName) {
     
     writeTableListFile();
     
-    string command = "rm /Users/mihailkocetkov/C++/MySUBD/MyDBMS/Databases/";
+    string command = "rm ";
+    command += databasePath;
     command += _dbName + "/";
     command += tableName + ".csv";
     system(command.c_str());
 }
 
 void Database::readTables() {
-    string path = "/Users/mihailkocetkov/C++/MySUBD/MyDBMS/Databases/";
+    string path = databasePath;
     path += _dbName + "/";
     
     fstream file(path + "tables.txt", ios::in);
@@ -100,7 +101,7 @@ void Database::readTables() {
 }
 
 void Database::readTable(string tableName) {
-    string path = "/Users/mihailkocetkov/C++/MySUBD/MyDBMS/Databases/";
+    string path = databasePath;
     path += _dbName + "/";
     
     fstream file(path + tableName + ".csv", ios::in);
@@ -163,7 +164,7 @@ void Database::readTable(string tableName) {
 
 void Database::writeTableListFile() {
     vector<string> tableList = showTables();
-    string path = "/Users/mihailkocetkov/C++/MySUBD/MyDBMS/Databases/";
+    string path = databasePath;
     path += _dbName + "/";
     
     fstream file(path + "tables.txt", ios::out | ios::trunc);

@@ -12,8 +12,8 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 #include <string>
-#include <boost/tokenizer.hpp>
 
 using namespace std;
 

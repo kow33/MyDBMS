@@ -19,6 +19,8 @@
 
 using namespace std;
 
+extern string databasePath;
+
 class TableManager {
     DBTable *_curTable;
     

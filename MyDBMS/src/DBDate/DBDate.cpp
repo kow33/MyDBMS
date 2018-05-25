@@ -43,13 +43,24 @@ const int DBDate::_arrDaysLeap[] = {
 
 // MARK: - Date Methods
 DBDate::DBDate(string date) {
-    boost::char_separator<char> sep(".");
-    boost::tokenizer<boost::char_separator<char>> tokens(date, sep);
-    vector<string> arrDate;
+    auto splitString = [](string str) -> vector<string> {
+        vector<string> splitedStr;
+        string tempStr = "";
+        
+        for (int i = 0; i < str.length(); i++) {
+            if (str[i] == '.') {
+                splitedStr.push_back(tempStr);
+                tempStr = "";
+                continue;
+            }
+            tempStr += str[i];
+        }
+        splitedStr.push_back(tempStr);
+        
+        return splitedStr;
+    };
     
-    for (const auto& tok : tokens) {
-        arrDate.push_back(tok);
-    }
+    vector<string> arrDate = splitString(date);
     
     _day = stoi(arrDate[0]);
     _month = stoi(arrDate[1]);
