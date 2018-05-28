@@ -11,7 +11,7 @@
 
 #pragma once
 
-enum DBType{
+enum class DBType{
     _NULL,
     _INT,
     _DOUBLE,

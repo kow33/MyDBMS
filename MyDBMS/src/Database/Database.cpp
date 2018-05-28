@@ -140,13 +140,13 @@ void Database::readTable(string tableName) {
         Column col(splitedLine[i]);
         string colType = splitedLine[i+1];
         if (colType == "Int") {
-            col._colType = _INT;
+            col._colType = DBType::_INT;
         } else if (colType == "Double") {
-            col._colType = _DOUBLE;
+            col._colType = DBType::_DOUBLE;
         } else if (colType == "String") {
-            col._colType = _STRING;
+            col._colType = DBType::_STRING;
         } else {
-            col._colType = _DATE;
+            col._colType = DBType::_DATE;
         }
         tableHead.emplace_back(col);
     }

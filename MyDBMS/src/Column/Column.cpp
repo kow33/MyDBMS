@@ -10,29 +10,29 @@
 
 void Column::setColTypeFromString(string colType) {
     if (colType == "Int") {
-        _colType = _INT;
+        _colType = DBType::_INT;
     } else if (colType == "Double") {
-        _colType = _DOUBLE;
+        _colType = DBType::_DOUBLE;
     } else if (colType == "String") {
-        _colType = _STRING;
+        _colType = DBType::_STRING;
     } else if (colType == "Date") {
-        _colType = _DATE;
+        _colType = DBType::_DATE;
     } else {
-        _colType = _NULL;
+        _colType = DBType::_NULL;
     }
 }
 
 string Column::getStringFromColType() {
     switch (_colType) {
-        case _INT:
+        case DBType::_INT:
             return "Int";
-        case _DOUBLE:
+        case DBType::_DOUBLE:
             return "Double";
-        case _STRING:
+        case DBType::_STRING:
             return "String";
-        case _DATE:
+        case DBType::_DATE:
             return "Date";
-        case _NULL:
+        case DBType::_NULL:
             return "Null";
     }
 }

@@ -89,27 +89,27 @@ vector<string> TableManager::select() {
         string row = "";
         for (int j = 0; j < headLen; j++) {
             switch (tableHead[j]._colType) {
-                case _NULL:
+                case DBType::_NULL:
                     break;
-                case _INT:
+                case DBType::_INT:
                     row += to_string(*static_cast<int*>(tempRow[j]));
                     if (j != headLen - 1) {
                         row += "|";
                     }
                     break;
-                case _DOUBLE:
+                case DBType::_DOUBLE:
                     row += to_string(*static_cast<double*>(tempRow[j]));
                     if (j != headLen - 1) {
                         row += "|";
                     }
                     break;
-                case _STRING:
+                case DBType::_STRING:
                     row += *static_cast<string*>(tempRow[j]);
                     if (j != headLen - 1) {
                         row += "|";
                     }
                     break;
-                case _DATE:
+                case DBType::_DATE:
                     row += static_cast<DBDate*>(tempRow[j])->dateToString();
                     if (j != headLen - 1) {
                         row += "|";
@@ -126,7 +126,7 @@ vector<string> TableManager::select() {
 vector<string> TableManager::selectWhere(string colName, string equalTo) {
     vector<string> selectedRows;
     Header tableHead = _curTable->getHead();
-    DBType colType = _NULL;
+    DBType colType = DBType::_NULL;
     size_t headLen = tableHead.size();
     bool isRealCol = false;
     
@@ -144,18 +144,18 @@ vector<string> TableManager::selectWhere(string colName, string equalTo) {
     
     void *p_equalTo = nullptr;
     switch (colType) {
-        case _NULL:
+        case DBType::_NULL:
             break;
-        case _INT:
+        case DBType::_INT:
             p_equalTo = new int(stoi(equalTo));
             break;
-        case _DOUBLE:
+        case DBType::_DOUBLE:
             p_equalTo = new double(stod(equalTo));
             break;
-        case _STRING:
+        case DBType::_STRING:
             p_equalTo = new string(equalTo);
             break;
-        case _DATE:
+        case DBType::_DATE:
             p_equalTo = new DBDate(equalTo);
             break;
     }
@@ -172,27 +172,27 @@ vector<string> TableManager::selectWhere(string colName, string equalTo) {
         string row = "";
         for (int j = 0; j < headLen; j++) {
             switch (tableHead[j]._colType) {
-                case _NULL:
+                case DBType::_NULL:
                     break;
-                case _INT:
+                case DBType::_INT:
                     row += to_string(*static_cast<int*>(tempRow[j]));
                     if (j != headLen - 1) {
                         row += "|";
                     }
                     break;
-                case _DOUBLE:
+                case DBType::_DOUBLE:
                     row += to_string(*static_cast<double*>(tempRow[j]));
                     if (j != headLen - 1) {
                         row += "|";
                     }
                     break;
-                case _STRING:
+                case DBType::_STRING:
                     row += *static_cast<string*>(tempRow[j]);
                     if (j != headLen - 1) {
                         row += "|";
                     }
                     break;
-                case _DATE:
+                case DBType::_DATE:
                     row += static_cast<DBDate*>(tempRow[j])->dateToString();
                     if (j != headLen - 1) {
                         row += "|";
@@ -209,7 +209,7 @@ vector<string> TableManager::selectWhere(string colName, string equalTo) {
 vector<string> TableManager::selectColumn(string colName) {
     vector<string> selectedElems;
     Header tableHead = _curTable->getHead();
-    DBType colType = _NULL;
+    DBType colType = DBType::_NULL;
     
     for (int i = 0; i < tableHead.size(); i++) {
         if (tableHead[i]._colName == colName) {
@@ -217,7 +217,7 @@ vector<string> TableManager::selectColumn(string colName) {
         }
     }
     
-    if (colType == _NULL) {
+    if (colType == DBType::_NULL) {
         throw string("column with this name not exist");
         return selectedElems;
     }
@@ -226,18 +226,18 @@ vector<string> TableManager::selectColumn(string colName) {
     
     for (int i = 0; i < tempColumn.size(); i++) {
         switch (colType) {
-            case _NULL:
+            case DBType::_NULL:
                 break;
-            case _INT:
+            case DBType::_INT:
                 selectedElems.emplace_back(to_string(*static_cast<int*>(tempColumn[i])));
                 break;
-            case _DOUBLE:
+            case DBType::_DOUBLE:
                 selectedElems.emplace_back(to_string(*static_cast<double*>(tempColumn[i])));
                 break;
-            case _STRING:
+            case DBType::_STRING:
                 selectedElems.emplace_back(*static_cast<string*>(tempColumn[i]));
                 break;
-            case _DATE:
+            case DBType::_DATE:
                 selectedElems.emplace_back(static_cast<DBDate*>(tempColumn[i])->dateToString());
                 break;
         }
@@ -258,18 +258,18 @@ void TableManager::insertRow(vector<string> row) {
     
     for (int i = 0; i < row.size(); i++) {
         switch (tableHead[i]._colType) {
-            case _NULL:
+            case DBType::_NULL:
                 break;
-            case _INT:
+            case DBType::_INT:
                 tempRow.push_back(new int(stoi(row[i])));
                 break;
-            case _DOUBLE:
+            case DBType::_DOUBLE:
                 tempRow.push_back(new double(stod(row[i])));
                 break;
-            case _STRING:
+            case DBType::_STRING:
                 tempRow.push_back(new string(row[i]));
                 break;
-            case _DATE:
+            case DBType::_DATE:
                 tempRow.push_back(new DBDate(row[i]));
                 break;
         }
@@ -283,7 +283,7 @@ void TableManager::deleteRows() {
 
 void TableManager::deleteRowsWhere(string colName, string equalTo) {
     Header tableHead = _curTable->getHead();
-    DBType colType = _NULL;
+    DBType colType = DBType::_NULL;
     bool isRealCol = false;
     
     for (int i = 0; i < tableHead.size(); i++) {
@@ -301,18 +301,18 @@ void TableManager::deleteRowsWhere(string colName, string equalTo) {
     void *p_equalTo = nullptr;
     
     switch (colType) {
-        case _NULL:
+        case DBType::_NULL:
             break;
-        case _INT:
+        case DBType::_INT:
             p_equalTo = new int(stoi(equalTo));
             break;
-        case _DOUBLE:
+        case DBType::_DOUBLE:
             p_equalTo = new double(stod(equalTo));
             break;
-        case _STRING:
+        case DBType::_STRING:
             p_equalTo = new string(equalTo);
             break;
-        case _DATE:
+        case DBType::_DATE:
             p_equalTo = new DBDate(equalTo);
             break;
     }
