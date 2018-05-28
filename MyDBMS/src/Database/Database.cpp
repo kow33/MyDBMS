@@ -8,86 +8,86 @@
 
 #include "Database.hpp"
 
-Database::Database(string dbName) {
-    _dbName = dbName;
+Database::Database(string t_dbName) {
+    m_dbName = t_dbName;
     readTables();
 }
 
 Database::~Database() {
-    if (_tm.isCurTableSet()) {
-        _tm.saveTable(_dbName);
+    if (tm.isCurTableSet()) {
+        tm.saveTable(m_dbName);
     }
-    for (auto temp : _tables) {
+    for (auto temp : m_tables) {
         delete temp.second;
     }
-    _tables.clear();
+    m_tables.clear();
 }
 
 string Database::getDBName() {
-    return _dbName;
+    return m_dbName;
 }
 
-void Database::useTable(string curTableName) {
-    if (_tables.find(curTableName) == _tables.end()) {
+void Database::useTable(string t_curTableName) {
+    if (m_tables.find(t_curTableName) == m_tables.end()) {
         throw string("table with this name not exist");
         return;
     }
-    if (_tm.isCurTableSet() && _tm.getCurTableName() == curTableName) {
+    if (tm.isCurTableSet() && tm.getCurTableName() == t_curTableName) {
         throw string("table with this name already in use");
         return;
     }
-    if (_tm.isCurTableSet()) {
-        _tm.saveTable(_dbName);
+    if (tm.isCurTableSet()) {
+        tm.saveTable(m_dbName);
     }
-    _tm.setCurTable(_tables[curTableName]);
+    tm.setCurTable(m_tables[t_curTableName]);
 }
 
 vector<string> Database::showTables() {
     vector<string> tableNameList;
-    if (_tables.size() == 0) {
+    if (m_tables.size() == 0) {
         throw string("No tables yet");
         return tableNameList;
     }
     
-    for (auto temp : _tables) {
+    for (auto temp : m_tables) {
         tableNameList.push_back(temp.first);
     }
     
     return tableNameList;
 }
 
-void Database::createTable(string tableName, string primaryKey, Header head) {
-    if (_tables.find(tableName) != _tables.end()) {
+void Database::createTable(string t_tableName, string t_primaryKey, Header t_head) {
+    if (m_tables.find(t_tableName) != m_tables.end()) {
         throw string("table with this name already exist");
         return;
     }
-    _tables.insert(pair<string, DBTable*>(tableName, new DBTable(tableName, primaryKey, head)));
+    m_tables.insert(pair<string, DBTable*>(t_tableName, new DBTable(t_tableName, t_primaryKey, t_head)));
     writeTableListFile();
 }
 
-void Database::removeTable(string tableName) {
-    if (_tables.find(tableName) == _tables.end()) {
+void Database::removeTable(string t_tableName) {
+    if (m_tables.find(t_tableName) == m_tables.end()) {
         throw string("table with this name not exist");
         return;
     }
-    if (_tm.getCurTableName() == tableName) {
-        _tm.setCurTable(nullptr);
+    if (tm.getCurTableName() == t_tableName) {
+        tm.setCurTable(nullptr);
     }
-    delete _tables[tableName];
-    _tables.erase(tableName);
+    delete m_tables[t_tableName];
+    m_tables.erase(t_tableName);
     
     writeTableListFile();
     
     string command = "rm ";
-    command += databasePath;
-    command += _dbName + "/";
-    command += tableName + ".csv";
+    command += database_path;
+    command += m_dbName + "/";
+    command += t_tableName + ".csv";
     system(command.c_str());
 }
 
 void Database::readTables() {
-    string path = databasePath;
-    path += _dbName + "/";
+    string path = database_path;
+    path += m_dbName + "/";
     
     fstream file(path + "tables.txt", ios::in);
     if (!file.is_open()) {
@@ -100,11 +100,11 @@ void Database::readTables() {
     file.close();
 }
 
-void Database::readTable(string tableName) {
-    string path = databasePath;
-    path += _dbName + "/";
+void Database::readTable(string t_tableName) {
+    string path = database_path;
+    path += m_dbName + "/";
     
-    fstream file(path + tableName + ".csv", ios::in);
+    fstream file(path + t_tableName + ".csv", ios::in);
     
     if (!file.is_open()) {
         return;
@@ -140,32 +140,32 @@ void Database::readTable(string tableName) {
         Column col(splitedLine[i]);
         string colType = splitedLine[i+1];
         if (colType == "Int") {
-            col._colType = DBType::_INT;
+            col.colType = DBType::Int;
         } else if (colType == "Double") {
-            col._colType = DBType::_DOUBLE;
+            col.colType = DBType::Double;
         } else if (colType == "String") {
-            col._colType = DBType::_STRING;
+            col.colType = DBType::String;
         } else {
-            col._colType = DBType::_DATE;
+            col.colType = DBType::Date;
         }
         tableHead.emplace_back(col);
     }
     
-    _tables.insert(pair<string, DBTable*>(tableName, new DBTable(tableName, primaryKey, tableHead)));
-    useTable(tableName);
+    m_tables.insert(pair<string, DBTable*>(t_tableName, new DBTable(t_tableName, primaryKey, tableHead)));
+    useTable(t_tableName);
     
     while (getline(file, line, '\n')) {
-        _tm.insertRow(splitString(line));
+        tm.insertRow(splitString(line));
     }
     
-    _tm.setCurTable(nullptr);
+    tm.setCurTable(nullptr);
     file.close();
 }
 
 void Database::writeTableListFile() {
     vector<string> tableList = showTables();
-    string path = databasePath;
-    path += _dbName + "/";
+    string path = database_path;
+    path += m_dbName + "/";
     
     fstream file(path + "tables.txt", ios::out | ios::trunc);
     

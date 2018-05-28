@@ -20,11 +20,11 @@
 
 using namespace std;
 
-extern string databasePath;
+extern string database_path;
 
 class DBMS {
-    map<string, Database*> _dbList;
-    Database *_curDB;
+    map<string, Database*> m_dbList;
+    Database *m_curDB;
     
 public:
     DBMS();
@@ -35,12 +35,12 @@ public:
     void readDBs();
     void saveDBs();
     vector<string> showDBs();
-    void useDB(string dbName);
+    void useDB(string t_dbName);
     
-    void createDB(string dbName);
-    void deleteDB(string dbName);
+    void createDB(string t_dbName);
+    void deleteDB(string t_dbName);
 };
 
 void printManualTable();
-void drawTable(vector<string> header, vector<string> data, ios_base &oriented(ios_base &) = right,  bool isRowsDelimOn = false);
+void drawTable(vector<string> t_header, vector<string> t_data, ios_base &t_oriented(ios_base &) = right,  bool t_isRowsDelimOn = false);
 #endif /* DBMS_hpp */

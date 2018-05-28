@@ -9,116 +9,116 @@
 #include "DBTable.hpp"
 
 DBTable::DBTable() {
-    _tableName = "NoName";
-    _primaryKey = "Null";
+    m_tableName = "NoName";
+    m_primaryKey = "Null";
 }
 
-DBTable::DBTable(string tableName) {
-    _tableName = tableName;
-    _primaryKey = "Null";
+DBTable::DBTable(string t_tableName) {
+    m_tableName = t_tableName;
+    m_primaryKey = "Null";
 }
 
-DBTable::DBTable(string tableName, string primaryKey, Header head) {
-    _tableName = tableName;
-    _primaryKey = primaryKey;
-    _head = head;
+DBTable::DBTable(string t_tableName, string t_primaryKey, Header t_head) {
+    m_tableName = t_tableName;
+    m_primaryKey = t_primaryKey;
+    m_head = t_head;
 }
 
-DBTable::DBTable(const DBTable &table) {
-    _tableName = table._tableName;
-    _primaryKey = table._primaryKey;
-    _head = table._head;
+DBTable::DBTable(const DBTable &t_table) {
+    m_tableName = t_table.m_tableName;
+    m_primaryKey = t_table.m_primaryKey;
+    m_head = t_table.m_head;
     
-    for (int i = 0; i < table._data.size(); i++) {
+    for (int i = 0; i < t_table.m_data.size(); i++) {
         vector<void*> tempRow;
-        for (int j = 0; j < table._data[i].size(); j++) {
-            switch (_head[j]._colType) {
-                case DBType::_NULL:
+        for (int j = 0; j < t_table.m_data[i].size(); j++) {
+            switch (m_head[j].colType) {
+                case DBType::Null:
                     break;
-                case DBType::_INT:
-                    tempRow.push_back(new int(*static_cast<int*>(table._data[i][j])));
+                case DBType::Int:
+                    tempRow.push_back(new int(*static_cast<int*>(t_table.m_data[i][j])));
                     break;
-                case DBType::_DOUBLE:
-                    tempRow.push_back(new double(*static_cast<double*>(table._data[i][j])));
+                case DBType::Double:
+                    tempRow.push_back(new double(*static_cast<double*>(t_table.m_data[i][j])));
                     break;
-                case DBType::_STRING:
-                    tempRow.push_back(new string(*static_cast<string*>(table._data[i][j])));
+                case DBType::String:
+                    tempRow.push_back(new string(*static_cast<string*>(t_table.m_data[i][j])));
                     break;
-                case DBType::_DATE:
-                    tempRow.push_back(new DBDate(*static_cast<DBDate*>(table._data[i][j])));
+                case DBType::Date:
+                    tempRow.push_back(new DBDate(*static_cast<DBDate*>(t_table.m_data[i][j])));
                     break;
             }
         }
-        _data.push_back(tempRow);
+        m_data.push_back(tempRow);
     }
 }
 
 DBTable::~DBTable() {
-    for (int i = 0; i < _data.size(); i++) {
-        for (int j = 0; j < _data[i].size(); j++) {
-            switch (_head[j]._colType) {
-                case DBType::_INT:
-                    delete reinterpret_cast<int*>(_data[i][j]);
+    for (int i = 0; i < m_data.size(); i++) {
+        for (int j = 0; j < m_data[i].size(); j++) {
+            switch (m_head[j].colType) {
+                case DBType::Int:
+                    delete reinterpret_cast<int*>(m_data[i][j]);
                     break;
-                case DBType::_DOUBLE:
-                    delete reinterpret_cast<double*>(_data[i][j]);
+                case DBType::Double:
+                    delete reinterpret_cast<double*>(m_data[i][j]);
                     break;
-                case DBType::_STRING:
-                    delete reinterpret_cast<string*>(_data[i][j]);
+                case DBType::String:
+                    delete reinterpret_cast<string*>(m_data[i][j]);
                     break;
-                case DBType::_DATE:
-                    delete reinterpret_cast<DBDate*>(_data[i][j]);
+                case DBType::Date:
+                    delete reinterpret_cast<DBDate*>(m_data[i][j]);
                     break;
-                case DBType::_NULL:
+                case DBType::Null:
                     break;
             }
         }
-        _data[i].clear();
+        m_data[i].clear();
     }
-    _data.clear();
+    m_data.clear();
 }
 
 int DBTable::size() {
-    return static_cast<int>(_data.size());
+    return static_cast<int>(m_data.size());
 }
 
 string DBTable::getTableName() {
-    return _tableName;
+    return m_tableName;
 }
 
 string DBTable::getPrimaryKey() {
-    return _primaryKey;
+    return m_primaryKey;
 }
 
 Header DBTable::getHead() {
-    return _head;
+    return m_head;
 }
 
-void DBTable::setTableName(string tableName) {
-    _tableName = tableName;
+void DBTable::setTableName(string t_tableName) {
+    m_tableName = t_tableName;
 }
 
-void DBTable::setPrimaryKey(string primaryKey) {
-    _primaryKey = primaryKey;
+void DBTable::setPrimaryKey(string t_primaryKey) {
+    m_primaryKey = t_primaryKey;
 }
 
-void DBTable::setHead(Header head) {
-    _head = head;
+void DBTable::setHead(Header t_head) {
+    m_head = t_head;
 }
 
-const vector<void*> DBTable::getRow(int ind) {
-    return _data[ind];
+const vector<void*> DBTable::getRow(int t_ind) {
+    return m_data[t_ind];
 }
 
-const vector<vector<void*>> DBTable::getRowsWhere(string colName, void *equalTo) {
+const vector<vector<void*>> DBTable::getRowsWhere(string t_colName, void *t_equalTo) {
     int columnIndex = -1;
-    DBType columnType = DBType::_NULL;
+    DBType columnType = DBType::Null;
     vector<vector<void*>> selectedRows;
     
-    for (int i = 0; i < _head.size(); i++) {
-        if (_head[i]._colName == colName) {
+    for (int i = 0; i < m_head.size(); i++) {
+        if (m_head[i].colName == t_colName) {
             columnIndex = i;
-            columnType = _head[i]._colType;
+            columnType = m_head[i].colType;
             break;
         }
     }
@@ -127,26 +127,26 @@ const vector<vector<void*>> DBTable::getRowsWhere(string colName, void *equalTo)
         return selectedRows;
     }
     
-    for (int i = 0; i < _data.size(); i++) {
+    for (int i = 0; i < m_data.size(); i++) {
         switch (columnType) {
-            case DBType::_INT:
-                if (*static_cast<int*>(_data[i][columnIndex]) == *static_cast<int*>(equalTo)) {
-                    selectedRows.push_back(_data[i]);
+            case DBType::Int:
+                if (*static_cast<int*>(m_data[i][columnIndex]) == *static_cast<int*>(t_equalTo)) {
+                    selectedRows.push_back(m_data[i]);
                 }
                 break;
-            case DBType::_DOUBLE:
-                if (*static_cast<double*>(_data[i][columnIndex]) == *static_cast<double*>(equalTo)) {
-                    selectedRows.push_back(_data[i]);
+            case DBType::Double:
+                if (*static_cast<double*>(m_data[i][columnIndex]) == *static_cast<double*>(t_equalTo)) {
+                    selectedRows.push_back(m_data[i]);
                 }
                 break;
-            case DBType::_STRING:
-                if (*static_cast<string*>(_data[i][columnIndex]) == *static_cast<string*>(equalTo)) {
-                    selectedRows.push_back(_data[i]);
+            case DBType::String:
+                if (*static_cast<string*>(m_data[i][columnIndex]) == *static_cast<string*>(t_equalTo)) {
+                    selectedRows.push_back(m_data[i]);
                 }
                 break;
-            case DBType::_DATE:
-                if (*static_cast<DBDate*>(_data[i][columnIndex]) == *static_cast<DBDate*>(equalTo)) {
-                    selectedRows.push_back(_data[i]);
+            case DBType::Date:
+                if (*static_cast<DBDate*>(m_data[i][columnIndex]) == *static_cast<DBDate*>(t_equalTo)) {
+                    selectedRows.push_back(m_data[i]);
                 }
                 break;
                 
@@ -158,11 +158,11 @@ const vector<vector<void*>> DBTable::getRowsWhere(string colName, void *equalTo)
     return selectedRows;
 }
 
-const vector<void*> DBTable::getColumn(string colName) {
+const vector<void*> DBTable::getColumn(string t_colName) {
     vector<void*> tempColumn;
     int columnIndex = -1;
-    for (int i = 0; i < _head.size(); i++) {
-        if (colName == _head[i]._colName) {
+    for (int i = 0; i < m_head.size(); i++) {
+        if (t_colName == m_head[i].colName) {
             columnIndex = i;
         }
     }
@@ -171,123 +171,123 @@ const vector<void*> DBTable::getColumn(string colName) {
         return tempColumn;
     }
     
-    switch (_head[columnIndex]._colType) {
-        case DBType::_INT:
-            for (int i = 0; i < _data.size(); i++) {
-                tempColumn.push_back(static_cast<int*>(_data[i][columnIndex]));
+    switch (m_head[columnIndex].colType) {
+        case DBType::Int:
+            for (int i = 0; i < m_data.size(); i++) {
+                tempColumn.push_back(static_cast<int*>(m_data[i][columnIndex]));
             }
             break;
-        case DBType::_DOUBLE:
-            for (int i = 0; i < _data.size(); i++) {
-                tempColumn.push_back(static_cast<double*>(_data[i][columnIndex]));
+        case DBType::Double:
+            for (int i = 0; i < m_data.size(); i++) {
+                tempColumn.push_back(static_cast<double*>(m_data[i][columnIndex]));
             }
             break;
-        case DBType::_STRING:
-            for (int i = 0; i < _data.size(); i++) {
-                tempColumn.push_back(static_cast<string*>(_data[i][columnIndex]));
+        case DBType::String:
+            for (int i = 0; i < m_data.size(); i++) {
+                tempColumn.push_back(static_cast<string*>(m_data[i][columnIndex]));
             }
             break;
-        case DBType::_DATE:
-            for (int i = 0; i < _data.size(); i++) {
-                tempColumn.push_back(static_cast<DBDate*>(_data[i][columnIndex]));
+        case DBType::Date:
+            for (int i = 0; i < m_data.size(); i++) {
+                tempColumn.push_back(static_cast<DBDate*>(m_data[i][columnIndex]));
             }
             break;
-        case DBType::_NULL:
+        case DBType::Null:
             break;
     }
     
     return tempColumn;
 }
 
-void DBTable::insertRow(vector<void*> &row) {
-    _data.push_back(row);
+void DBTable::insertRow(vector<void*> &t_row) {
+    m_data.push_back(t_row);
 }
 
 void DBTable::removeRows() {
-    for (int i = 0; i < _data.size(); i++) {
-        for (int j = 0; j < _data[0].size(); j++) {
-            switch (_head[j]._colType) {
-                case DBType::_INT:
-                    delete reinterpret_cast<int*>(_data[i][j]);
+    for (int i = 0; i < m_data.size(); i++) {
+        for (int j = 0; j < m_data[0].size(); j++) {
+            switch (m_head[j].colType) {
+                case DBType::Int:
+                    delete reinterpret_cast<int*>(m_data[i][j]);
                     break;
-                case DBType::_DOUBLE:
-                    delete reinterpret_cast<double*>(_data[i][j]);
+                case DBType::Double:
+                    delete reinterpret_cast<double*>(m_data[i][j]);
                     break;
-                case DBType::_STRING:
-                    delete reinterpret_cast<string*>(_data[i][j]);
+                case DBType::String:
+                    delete reinterpret_cast<string*>(m_data[i][j]);
                     break;
-                case DBType::_DATE:
-                    delete reinterpret_cast<DBDate*>(_data[i][j]);
+                case DBType::Date:
+                    delete reinterpret_cast<DBDate*>(m_data[i][j]);
                     break;
-                case DBType::_NULL:
+                case DBType::Null:
                     break;
             }
         }
     }
-    for (int i = 0; i < _data.size(); i++) {
-        _data[i].clear();
+    for (int i = 0; i < m_data.size(); i++) {
+        m_data[i].clear();
     }
-    _data.clear();
+    m_data.clear();
 }
 
-void DBTable::removeRow(int ind) {
-    for (int i = 0; i < _data[ind].size(); i++) {
-        switch (_head[i]._colType) {
-            case DBType::_INT:
-                delete reinterpret_cast<int*>(_data[ind][i]);
+void DBTable::removeRow(int t_ind) {
+    for (int i = 0; i < m_data[t_ind].size(); i++) {
+        switch (m_head[i].colType) {
+            case DBType::Int:
+                delete reinterpret_cast<int*>(m_data[t_ind][i]);
                 break;
-            case DBType::_DOUBLE:
-                delete reinterpret_cast<double*>(_data[ind][i]);
+            case DBType::Double:
+                delete reinterpret_cast<double*>(m_data[t_ind][i]);
                 break;
-            case DBType::_STRING:
-                delete reinterpret_cast<string*>(_data[ind][i]);
+            case DBType::String:
+                delete reinterpret_cast<string*>(m_data[t_ind][i]);
                 break;
-            case DBType::_DATE:
-                delete reinterpret_cast<DBDate*>(_data[ind][i]);
+            case DBType::Date:
+                delete reinterpret_cast<DBDate*>(m_data[t_ind][i]);
                 break;
-            case DBType::_NULL:
+            case DBType::Null:
                 break;
         }
     }
     
-    for (auto iter = _data.end() - 1; iter != _data.begin() - 1; iter--) {
-        if (*iter == _data[ind]) {
-            _data.erase(iter);
+    for (auto iter = m_data.end() - 1; iter != m_data.begin() - 1; iter--) {
+        if (*iter == m_data[t_ind]) {
+            m_data.erase(iter);
         }
     }
 }
 
-void DBTable::removeRowsWhere(string colName, void *equalTo) {
+void DBTable::removeRowsWhere(string t_colName, void *t_equalTo) {
     int columnIndex = -1;
-    DBType columnType = DBType::_NULL;
+    DBType columnType = DBType::Null;
     
-    for (int i = 0; i < _head.size(); i++) {
-        if (_head[i]._colName == colName) {
+    for (int i = 0; i < m_head.size(); i++) {
+        if (m_head[i].colName == t_colName) {
             columnIndex = i;
-            columnType = _head[i]._colType;
+            columnType = m_head[i].colType;
             break;
         }
     }
     
-    for (int i = int(_data.size()) - 1; i >= 0; i--) {
+    for (int i = int(m_data.size()) - 1; i >= 0; i--) {
         switch (columnType) {
-            case DBType::_INT:
-                if (*static_cast<int*>(_data[i][columnIndex]) == *static_cast<int*>(equalTo)) {
+            case DBType::Int:
+                if (*static_cast<int*>(m_data[i][columnIndex]) == *static_cast<int*>(t_equalTo)) {
                     removeRow(i);
                 }
                 break;
-            case DBType::_DOUBLE:
-                if (*static_cast<double*>(_data[i][columnIndex]) == *static_cast<double*>(equalTo)) {
+            case DBType::Double:
+                if (*static_cast<double*>(m_data[i][columnIndex]) == *static_cast<double*>(t_equalTo)) {
                     removeRow(i);
                 }
                 break;
-            case DBType::_STRING:
-                if (*static_cast<string*>(_data[i][columnIndex]) == *static_cast<string*>(equalTo)) {
+            case DBType::String:
+                if (*static_cast<string*>(m_data[i][columnIndex]) == *static_cast<string*>(t_equalTo)) {
                     removeRow(i);
                 }
                 break;
-            case DBType::_DATE:
-                if (*static_cast<DBDate*>(_data[i][columnIndex]) == *static_cast<DBDate*>(equalTo)) {
+            case DBType::Date:
+                if (*static_cast<DBDate*>(m_data[i][columnIndex]) == *static_cast<DBDate*>(t_equalTo)) {
                     removeRow(i);
                 }
                 break;

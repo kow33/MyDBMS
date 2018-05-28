@@ -12,11 +12,11 @@
 #pragma once
 
 enum class DBType{
-    _NULL,
-    _INT,
-    _DOUBLE,
-    _STRING,
-    _DATE
+    Null,
+    Int,
+    Double,
+    String,
+    Date
 };
 
 #endif /* Enums_hpp */

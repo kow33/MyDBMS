@@ -10,14 +10,14 @@
 
 DBMS::DBMS() {
     readDBs();
-    _curDB = nullptr;
+    m_curDB = nullptr;
 }
 
 DBMS::~DBMS() {
-    for (auto temp : _dbList) {
+    for (auto temp : m_dbList) {
         delete temp.second;
     }
-    _dbList.clear();
+    m_dbList.clear();
 }
 
 void DBMS::run() {
@@ -28,11 +28,11 @@ void DBMS::run() {
         int ans;
         
         cout << ">";
-        if (_curDB != nullptr) {
-            cout << " " << _curDB->getDBName();
+        if (m_curDB != nullptr) {
+            cout << " " << m_curDB->getDBName();
         }
-        if (_curDB != nullptr && _curDB->_tm.isCurTableSet()) {
-            cout << "." << _curDB->_tm.getCurTableName();
+        if (m_curDB != nullptr && m_curDB->tm.isCurTableSet()) {
+            cout << "." << m_curDB->tm.getCurTableName();
         }
         cout << " ";
         
@@ -83,11 +83,11 @@ void DBMS::run() {
             } catch (string err) {
                 cerr << "Error: " << err << endl;
             }
-        } else if (ans > 4 && _curDB == nullptr) {
+        } else if (ans > 4 && m_curDB == nullptr) {
             cerr << "Please, take database in use" << endl;
         } else if (ans == 5) {
             try {
-                vector<string> tableList = _curDB->showTables();
+                vector<string> tableList = m_curDB->showTables();
                 cout << "Tables: " << endl;
                 drawTable(vector<string>(), tableList, left, true);
             } catch (string err) {
@@ -98,7 +98,7 @@ void DBMS::run() {
             cout << "Enter table name: ";
             cin >> curTableName;
             try {
-                _curDB->useTable(curTableName);
+                m_curDB->useTable(curTableName);
             } catch (string err) {
                 cerr << "Error: " << err << endl;
             }
@@ -120,7 +120,7 @@ void DBMS::run() {
                 string colType;
                 cout << "Column " << i + 1 << endl;
                 cout << "Enter column name: ";
-                cin >> col._colName;
+                cin >> col.colName;
                 cout << "Enter column type(Int, Double, String, Date): ";
                 cin >> colType;
                 col.setColTypeFromString(colType);
@@ -131,7 +131,7 @@ void DBMS::run() {
             cin >> primaryKey;
             
             try {
-                _curDB->createTable(tableName, primaryKey, head);
+                m_curDB->createTable(tableName, primaryKey, head);
             } catch (string err) {
                 cerr << "Error: " << err << endl;
             }
@@ -140,17 +140,17 @@ void DBMS::run() {
             cout << "Enter table name: ";
             cin >> tableName;
             try {
-                _curDB->removeTable(tableName);
+                m_curDB->removeTable(tableName);
             } catch (string err) {
                 cerr << "Error: " << err << endl;
             }
-        } else if (ans > 8 && !_curDB->_tm.isCurTableSet()) {
+        } else if (ans > 8 && !m_curDB->tm.isCurTableSet()) {
             cerr << "Please, take table in use" << endl;
         } else if (ans == 9) {
             try {
-                vector<string> tableRows = _curDB->_tm.select();
-                cout << "Table " << _curDB->_tm.getCurTableName() << ":" << endl;
-                vector<string> colNameList = _curDB->_tm.getCurTableColNames();
+                vector<string> tableRows = m_curDB->tm.select();
+                cout << "Table " << m_curDB->tm.getCurTableName() << ":" << endl;
+                vector<string> colNameList = m_curDB->tm.getCurTableColNames();
                 
                 drawTable(colNameList, tableRows);
             } catch (string err) {
@@ -167,8 +167,8 @@ void DBMS::run() {
             cin >> equalTo;
             
             try {
-                vector<string> colNameList = _curDB->_tm.getCurTableColNames();
-                vector<string> tableRows = _curDB->_tm.selectWhere(colName, equalTo);
+                vector<string> colNameList = m_curDB->tm.getCurTableColNames();
+                vector<string> tableRows = m_curDB->tm.selectWhere(colName, equalTo);
                 drawTable(colNameList, tableRows);
             } catch (string err) {
                 cerr << "Error: " << err << endl;
@@ -184,7 +184,7 @@ void DBMS::run() {
             try {
                 vector<string> nameOfCol;
                 nameOfCol.push_back(colName);
-                vector<string> column = _curDB->_tm.selectColumn(colName);
+                vector<string> column = m_curDB->tm.selectColumn(colName);
                 drawTable(nameOfCol, column);
             } catch (string err) {
                 cerr << "Error: " << err << endl;
@@ -192,7 +192,7 @@ void DBMS::run() {
             
         } else if (ans == 12) {
             vector<string> row;
-            vector<string> colNameList = _curDB->_tm.getCurTableColNames();
+            vector<string> colNameList = m_curDB->tm.getCurTableColNames();
             cout << "Enter data:" << endl;
             for (int i = 0; i < colNameList.size(); i++) {
                 string answer;
@@ -202,12 +202,12 @@ void DBMS::run() {
             }
             
             try {
-                _curDB->_tm.insertRow(row);
+                m_curDB->tm.insertRow(row);
             } catch (string err) {
                 cerr << "Error: " << err << endl;
             }
         } else if (ans == 13) {
-            _curDB->_tm.deleteRows();
+            m_curDB->tm.deleteRows();
             cout << "Success!" << endl;
         } else if (ans == 14) {
             string colName;
@@ -220,7 +220,7 @@ void DBMS::run() {
             cin >> equalTo;
             
             try {
-                _curDB->_tm.deleteRowsWhere(colName, equalTo);
+                m_curDB->tm.deleteRowsWhere(colName, equalTo);
                 cout << "Success!" << endl;
             } catch (string err) {
                 cerr << "Error: " << err << endl;
@@ -232,7 +232,7 @@ void DBMS::run() {
 }
 
 void DBMS::readDBs() {
-    string path = databasePath;
+    string path = database_path;
     
     fstream file(path + "Databases.txt", ios::in);
     
@@ -242,18 +242,18 @@ void DBMS::readDBs() {
     
     string line;
     while (getline(file, line, '\n')) {
-        _dbList.insert(pair<string, Database*>(line, new Database(line)));
+        m_dbList.insert(pair<string, Database*>(line, new Database(line)));
     }
     
     file.close();
 }
 
 void DBMS::saveDBs() {
-    string path = databasePath;
+    string path = database_path;
     
     fstream file(path + "Databases.txt", ios::out | ios::trunc);
     
-    for (auto temp : _dbList) {
+    for (auto temp : m_dbList) {
         file << temp.first << endl;
     }
     
@@ -262,38 +262,38 @@ void DBMS::saveDBs() {
 
 vector<string> DBMS::showDBs() {
     vector<string> dbNameList;
-    if (_dbList.size() == 0) {
+    if (m_dbList.size() == 0) {
         throw string("No databases yet");
         return dbNameList;
     }
-    for (auto temp : _dbList) {
+    for (auto temp : m_dbList) {
         dbNameList.push_back(temp.first);
     }
     
     return dbNameList;
 }
 
-void DBMS::useDB(string dbName) {
-    if (_dbList.find(dbName) == _dbList.end()) {
+void DBMS::useDB(string t_dbName) {
+    if (m_dbList.find(t_dbName) == m_dbList.end()) {
         throw string("database with this name not exist");
         return;
     }
-    if (_curDB != nullptr && _curDB->getDBName() == dbName) {
+    if (m_curDB != nullptr && m_curDB->getDBName() == t_dbName) {
         throw string("database with this name already in use");
         return;
     }
-    _curDB = _dbList[dbName];
+    m_curDB = m_dbList[t_dbName];
 }
 
-void DBMS::createDB(string dbName) {
-    if (_dbList.find(dbName) != _dbList.end()) {
+void DBMS::createDB(string t_dbName) {
+    if (m_dbList.find(t_dbName) != m_dbList.end()) {
         throw string("database with this name alredy exist");
         return;
     }
-    _dbList.insert(pair<string, Database*>(dbName, new Database(dbName)));
+    m_dbList.insert(pair<string, Database*>(t_dbName, new Database(t_dbName)));
     
-    string command1 = "mkdir " + databasePath + dbName;
-    string command2 = "touch " + databasePath + dbName + "/";
+    string command1 = "mkdir " + database_path + t_dbName;
+    string command2 = "touch " + database_path + t_dbName + "/";
     command2 += "tables.txt";
     system(command1.c_str());
     system(command2.c_str());
@@ -301,18 +301,18 @@ void DBMS::createDB(string dbName) {
     saveDBs();
 }
 
-void DBMS::deleteDB(string dbName) {
-    if (_dbList.find(dbName) == _dbList.end()) {
+void DBMS::deleteDB(string t_dbName) {
+    if (m_dbList.find(t_dbName) == m_dbList.end()) {
         throw string("database with this name not exist");
         return;
     }
-    if (_curDB != nullptr && _curDB->getDBName() == dbName) {
-        _curDB = nullptr;
+    if (m_curDB != nullptr && m_curDB->getDBName() == t_dbName) {
+        m_curDB = nullptr;
     }
-    delete _dbList[dbName];
-    _dbList.erase(dbName);
+    delete m_dbList[t_dbName];
+    m_dbList.erase(t_dbName);
     
-    string command = "rm -R " + databasePath + dbName;
+    string command = "rm -R " + database_path + t_dbName;
     system(command.c_str());
     
     saveDBs();
@@ -366,7 +366,7 @@ void printManualTable() {
 //    cout << endl;
 }
 
-void drawTable(vector<string> header, vector<string> data, ios_base &oriented(ios_base &), bool isRowsDelimOn) {
+void drawTable(vector<string> t_header, vector<string> t_data, ios_base &t_oriented(ios_base &), bool t_isRowsDelimOn) {
     auto splitString = [](string str) -> vector<string> {
         vector<string> splitedStr;
         string tempStr = "";
@@ -398,7 +398,7 @@ void drawTable(vector<string> header, vector<string> data, ios_base &oriented(io
         cout << endl;
     };
     
-    auto drawTable = [drawLine, oriented, isRowsDelimOn](vector<string> header, vector<vector<string>> data) {
+    auto drawTable = [drawLine, t_oriented, t_isRowsDelimOn](vector<string> header, vector<vector<string>> data) {
         int countOfCols;
         bool isHeaderOn = true;
         if (int(header.size()) != 0) {
@@ -429,7 +429,7 @@ void drawTable(vector<string> header, vector<string> data, ios_base &oriented(io
             cout << "|";
             for (int i = 0; i < countOfCols; i++) {
                 cout << " ";
-                cout << setfill(' ') << oriented << setw(maxSizeInCol[i]) << header[i];
+                cout << setfill(' ') << t_oriented << setw(maxSizeInCol[i]) << header[i];
                 cout << " |";
             }
             cout << endl;
@@ -440,11 +440,11 @@ void drawTable(vector<string> header, vector<string> data, ios_base &oriented(io
             cout << "|";
             for (int j = 0; j < countOfCols; j++) {
                 cout << " ";
-                cout << setfill(' ') << oriented << setw(maxSizeInCol[j]) << data[i][j];
+                cout << setfill(' ') << t_oriented << setw(maxSizeInCol[j]) << data[i][j];
                 cout << " |";
             }
             cout << endl;
-            if (isRowsDelimOn && i != data.size() - 1) {
+            if (t_isRowsDelimOn && i != data.size() - 1) {
                 drawLine(maxSizeInCol);
             }
         }
@@ -453,9 +453,9 @@ void drawTable(vector<string> header, vector<string> data, ios_base &oriented(io
     
     vector<vector<string>> splitedData;
     
-    for (int i = 0; i < data.size(); i++) {
-        splitedData.push_back(splitString(data[i]));
+    for (int i = 0; i < t_data.size(); i++) {
+        splitedData.push_back(splitString(t_data[i]));
     }
     
-    drawTable(header, splitedData);
+    drawTable(t_header, splitedData);
 }

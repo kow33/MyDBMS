@@ -9,7 +9,7 @@
 #include "DBDate.hpp"
 
 // MARK: - Date Properties
-const int DBDate::_arrDaysNotLeap[] = {
+const int DBDate::m_arrDaysNotLeap[] = {
     0,
     31,
     28,
@@ -25,7 +25,7 @@ const int DBDate::_arrDaysNotLeap[] = {
     31
 };
 
-const int DBDate::_arrDaysLeap[] = {
+const int DBDate::m_arrDaysLeap[] = {
     0,
     31,
     29,
@@ -42,7 +42,7 @@ const int DBDate::_arrDaysLeap[] = {
 };
 
 // MARK: - Date Methods
-DBDate::DBDate(string date) {
+DBDate::DBDate(string t_date) {
     auto splitString = [](string str) -> vector<string> {
         vector<string> splitedStr;
         string tempStr = "";
@@ -60,32 +60,32 @@ DBDate::DBDate(string date) {
         return splitedStr;
     };
     
-    vector<string> arrDate = splitString(date);
+    vector<string> arrDate = splitString(t_date);
     
-    _day = stoi(arrDate[0]);
-    _month = stoi(arrDate[1]);
-    _year = stoi(arrDate[2]);
+    m_day = stoi(arrDate[0]);
+    m_month = stoi(arrDate[1]);
+    m_year = stoi(arrDate[2]);
     
 }
 
 int DBDate::getDay() {
-    return _day;
+    return m_day;
 }
 
 int DBDate::getMonth() {
-    return _month;
+    return m_month;
 }
 
 int DBDate::getYear() {
-    return _year;
+    return m_year;
 }
 
 bool DBDate::isLeapYear() {
-    return isLeapYear(_year);
+    return isLeapYear(m_year);
 }
 
-bool DBDate::isLeapYear(int year) {
-    if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
+bool DBDate::isLeapYear(int t_year) {
+    if ((t_year % 4 == 0 && t_year % 100 != 0) || (t_year % 400 == 0)) {
         return true;
     } else {
         return false;
@@ -93,22 +93,22 @@ bool DBDate::isLeapYear(int year) {
 }
 
 int DBDate::getDaysInMonth() {
-    return getDaysInMonth(_month, _year);
+    return getDaysInMonth(m_month, m_year);
 }
 
-int DBDate::getDaysInMonth(int month, int year) {
-    if (isLeapYear(year)) {
-        return _arrDaysLeap[month];
+int DBDate::getDaysInMonth(int t_month, int t_year) {
+    if (isLeapYear(t_year)) {
+        return m_arrDaysLeap[t_month];
     } else {
-        return _arrDaysNotLeap[month];
+        return m_arrDaysNotLeap[t_month];
     }
 }
 
 int DBDate::getDaysForNowInCurYear() {
-    int sum = _day - 1;
+    int sum = m_day - 1;
     
-    for (int i = 1; i < _month; i++) {
-        sum += getDaysInMonth(i, _year);
+    for (int i = 1; i < m_month; i++) {
+        sum += getDaysInMonth(i, m_year);
     }
     
     return sum;
@@ -118,153 +118,153 @@ string DBDate::dateToString() {
     return dateToString(*this);
 }
 
-string DBDate::dateToString(const DBDate &date) {
+string DBDate::dateToString(const DBDate &t_date) {
     string strTemp = "";
     
-    if (date._day > 9) {
-        strTemp += to_string(date._day) + ".";
+    if (t_date.m_day > 9) {
+        strTemp += to_string(t_date.m_day) + ".";
     } else {
-        strTemp += "0" + to_string(date._day) + ".";
+        strTemp += "0" + to_string(t_date.m_day) + ".";
     }
     
-    if (date._month > 9) {
-        strTemp += to_string(date._month) + ".";
+    if (t_date.m_month > 9) {
+        strTemp += to_string(t_date.m_month) + ".";
     } else {
-        strTemp += "0" + to_string(date._month) + ".";
+        strTemp += "0" + to_string(t_date.m_month) + ".";
     }
-    if (date._year > 999) {
-        strTemp += to_string(date._year);
-    } else if (date._year > 99) {
-        strTemp += "0" + to_string(date._year);
-    } else if (date._year > 9) {
-        strTemp += "00" + to_string(date._year);
+    if (t_date.m_year > 999) {
+        strTemp += to_string(t_date.m_year);
+    } else if (t_date.m_year > 99) {
+        strTemp += "0" + to_string(t_date.m_year);
+    } else if (t_date.m_year > 9) {
+        strTemp += "00" + to_string(t_date.m_year);
     } else {
-        strTemp += "000" + to_string(date._year);
+        strTemp += "000" + to_string(t_date.m_year);
     }
     
     return strTemp;
 }
 
 // MARK: - Date Operators
-bool DBDate::operator==(const DBDate &date) {
-    if ((_day == date._day) && (_month == date._month) && (_year == date._year)) {
+bool DBDate::operator==(const DBDate &t_date) {
+    if ((m_day == t_date.m_day) && (m_month == t_date.m_month) && (m_year == t_date.m_year)) {
         return true;
     } else {
         return false;
     }
 }
 
-bool DBDate::operator!=(const DBDate &date) {
-    return !(*this == date);
+bool DBDate::operator!=(const DBDate &t_date) {
+    return !(*this == t_date);
 }
 
-bool DBDate::operator<(const DBDate &date) {
-    if (_year < date._year) {
+bool DBDate::operator<(const DBDate &t_date) {
+    if (m_year < t_date.m_year) {
         return true;
-    } else if ((_year == date._year) && (_month < date._month)) {
+    } else if ((m_year == t_date.m_year) && (m_month < t_date.m_month)) {
         return true;
-    } else if ((_year == date._year) && (_month == date._month) && (_day < date._day)) {
+    } else if ((m_year == t_date.m_year) && (m_month == t_date.m_month) && (m_day < t_date.m_day)) {
         return true;
     } else {
         return false;
     }
 }
 
-bool DBDate::operator>(const DBDate &date) {
-    if (_year > date._year) {
+bool DBDate::operator>(const DBDate &t_date) {
+    if (m_year > t_date.m_year) {
         return true;
-    } else if ((_year == date._year) && (_month > date._month)) {
+    } else if ((m_year == t_date.m_year) && (m_month > t_date.m_month)) {
         return true;
-    } else if ((_year == date._year) && (_month == date._month) && (_day > date._day)) {
+    } else if ((m_year == t_date.m_year) && (m_month == t_date.m_month) && (m_day > t_date.m_day)) {
         return true;
     } else {
         return false;
     }
 }
 
-bool DBDate::operator<=(const DBDate &date) {
-    if (*this == date) {
+bool DBDate::operator<=(const DBDate &t_date) {
+    if (*this == t_date) {
         return true;
     } else {
-        return (*this < date);
+        return (*this < t_date);
     }
 }
 
-bool DBDate::operator>=(const DBDate &date) {
-    if (*this == date) {
+bool DBDate::operator>=(const DBDate &t_date) {
+    if (*this == t_date) {
         return true;
     } else {
-        return (*this > date);
+        return (*this > t_date);
     }
 }
 
-DBDate &DBDate::operator=(const DBDate &date) {
-    _day = date._day;
-    _month = date._month;
-    _year = date._year;
+DBDate &DBDate::operator=(const DBDate &t_date) {
+    m_day = t_date.m_day;
+    m_month = t_date.m_month;
+    m_year = t_date.m_year;
     
     return *this;
 }
 
-DBDate &DBDate::operator+=(int days) {
-    while ((_day + days) > (isLeapYear() ? _arrDaysLeap[_month] : _arrDaysNotLeap[_month])) {
+DBDate &DBDate::operator+=(int t_days) {
+    while ((m_day + t_days) > (isLeapYear() ? m_arrDaysLeap[m_month] : m_arrDaysNotLeap[m_month])) {
         if (isLeapYear()) {
-            days -= _arrDaysLeap[_month];
-            _month++;
+            t_days -= m_arrDaysLeap[m_month];
+            m_month++;
         } else {
-            days -= _arrDaysNotLeap[_month];
-            _month++;
+            t_days -= m_arrDaysNotLeap[m_month];
+            m_month++;
         }
-        if (_month > 12) {
-            _month -= 12;
-            _year++;
+        if (m_month > 12) {
+            m_month -= 12;
+            m_year++;
         }
     }
-    _day += days;
+    m_day += t_days;
     
     return *this;
 }
 
-DBDate &DBDate::operator-=(int days) {
-    while ((_day - days) < 1) {
-        if ((_month - 1) < 1) {
-            _month += 12;
-            _year--;
+DBDate &DBDate::operator-=(int t_days) {
+    while ((m_day - t_days) < 1) {
+        if ((m_month - 1) < 1) {
+            m_month += 12;
+            m_year--;
         }
         if (isLeapYear()) {
-            days -= _arrDaysLeap[_month - 1];
-            _month--;
+            t_days -= m_arrDaysLeap[m_month - 1];
+            m_month--;
         } else {
-            days -= _arrDaysNotLeap[_month - 1];
-            _month --;
+            t_days -= m_arrDaysNotLeap[m_month - 1];
+            m_month --;
         }
     }
-    _day -= days;
+    m_day -= t_days;
     return *this;
 }
 
-int DBDate::operator-(const DBDate &date) {
+int DBDate::operator-(const DBDate &t_date) {
     bool possitive;
-    int res = abs(_day - date._day);
-    if (*this < date) {
+    int res = abs(m_day - t_date.m_day);
+    if (*this < t_date) {
         possitive = false;
-        for (int i = _year; i <= date._year; i++) {
-            for (int j = _month; j < date._month; j++) {
+        for (int i = m_year; i <= t_date.m_year; i++) {
+            for (int j = m_month; j < t_date.m_month; j++) {
                 if (isLeapYear(i)) {
-                    res += _arrDaysLeap[j];
+                    res += m_arrDaysLeap[j];
                 } else {
-                    res += _arrDaysNotLeap[j];
+                    res += m_arrDaysNotLeap[j];
                 }
             }
         }
     } else {
         possitive = true;
-        for (int i = date._year; i <= _year; i++) {
-            for (int j = date._month; j < _month; j++) {
+        for (int i = t_date.m_year; i <= m_year; i++) {
+            for (int j = t_date.m_month; j < m_month; j++) {
                 if (isLeapYear(i)) {
-                    res += _arrDaysLeap[j];
+                    res += m_arrDaysLeap[j];
                 } else {
-                    res += _arrDaysNotLeap[j];
+                    res += m_arrDaysNotLeap[j];
                 }
             }
         }
@@ -277,7 +277,7 @@ int DBDate::operator-(const DBDate &date) {
     }
 }
 
-ostream &operator<<(ostream &out, const DBDate& date) {
-    out << DBDate::dateToString(date);
-    return out;
+ostream &operator<<(ostream &t_out, const DBDate& t_date) {
+    t_out << DBDate::dateToString(t_date);
+    return t_out;
 }

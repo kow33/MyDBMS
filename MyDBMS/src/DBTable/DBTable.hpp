@@ -25,16 +25,16 @@ using namespace std;
 typedef vector<Column> Header;
 
 class DBTable {
-    string _tableName;
-    string _primaryKey;
-    Header _head;
-    vector<vector<void*>> _data;
+    string m_tableName;
+    string m_primaryKey;
+    Header m_head;
+    vector<vector<void*>> m_data;
     
 public:
     DBTable();
-    DBTable(string tableName);
-    DBTable(string tableName, string primaryKey, Header head);
-    DBTable(const DBTable &table);
+    DBTable(string t_tableName);
+    DBTable(string t_tableName, string t_primaryKey, Header t_head);
+    DBTable(const DBTable &t_table);
     ~DBTable();
     
     int size();
@@ -42,18 +42,18 @@ public:
     string getPrimaryKey();
     Header getHead();
     
-    void setTableName(string tableName);
-    void setPrimaryKey(string primaryKey);
-    void setHead(Header head);
+    void setTableName(string t_tableName);
+    void setPrimaryKey(string t_primaryKey);
+    void setHead(Header t_head);
     
-    const vector<void*> getRow(int ind);
-    const vector<vector<void*>> getRowsWhere(string colName, void *equalTo);
-    const vector<void*> getColumn(string colName);
+    const vector<void*> getRow(int t_ind);
+    const vector<vector<void*>> getRowsWhere(string t_colName, void *t_equalTo);
+    const vector<void*> getColumn(string t_colName);
     
-    void insertRow(vector<void*> &row);
+    void insertRow(vector<void*> &t_row);
     void removeRows();
-    void removeRow(int ind);
-    void removeRowsWhere(string colName, void *equalTo);
+    void removeRow(int t_ind);
+    void removeRowsWhere(string t_colName, void *t_equalTo);
 };
 
 #endif /* DBTable_hpp */

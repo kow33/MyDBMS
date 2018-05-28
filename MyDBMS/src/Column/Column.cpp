@@ -8,43 +8,43 @@
 
 #include "Column.hpp"
 
-void Column::setColTypeFromString(string colType) {
-    if (colType == "Int") {
-        _colType = DBType::_INT;
-    } else if (colType == "Double") {
-        _colType = DBType::_DOUBLE;
-    } else if (colType == "String") {
-        _colType = DBType::_STRING;
-    } else if (colType == "Date") {
-        _colType = DBType::_DATE;
+void Column::setColTypeFromString(string t_colType) {
+    if (t_colType == "Int") {
+        colType = DBType::Int;
+    } else if (t_colType == "Double") {
+        colType = DBType::Double;
+    } else if (t_colType == "String") {
+        colType = DBType::String;
+    } else if (t_colType == "Date") {
+        colType = DBType::Date;
     } else {
-        _colType = DBType::_NULL;
+        colType = DBType::Null;
     }
 }
 
 string Column::getStringFromColType() {
-    switch (_colType) {
-        case DBType::_INT:
+    switch (colType) {
+        case DBType::Int:
             return "Int";
-        case DBType::_DOUBLE:
+        case DBType::Double:
             return "Double";
-        case DBType::_STRING:
+        case DBType::String:
             return "String";
-        case DBType::_DATE:
+        case DBType::Date:
             return "Date";
-        case DBType::_NULL:
+        case DBType::Null:
             return "Null";
     }
 }
 
-bool Column::operator==(const Column &col) {
-    if (_colType == col._colType && _colName == col._colName) {
+bool Column::operator==(const Column &t_col) {
+    if (colType == t_col.colType && colName == t_col.colName) {
         return true;
     } else {
         return false;
     }
 }
 
-bool Column::operator!=(const Column &col) {
-    return !((*this) == col);
+bool Column::operator!=(const Column &t_col) {
+    return !((*this) == t_col);
 }

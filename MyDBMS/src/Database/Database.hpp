@@ -22,29 +22,29 @@
 
 using namespace std;
 
-extern string databasePath;
+extern string database_path;
 
 class Database {
-    string _dbName;
-    map<string, DBTable*> _tables;
+    string m_dbName;
+    map<string, DBTable*> m_tables;
     
     Database() {}
     void readTables();
-    void readTable(string tableName);
+    void readTable(string t_tableName);
     void writeTableListFile();
 public:
-    TableManager _tm;
+    TableManager tm;
     
-    Database(string dbName);
+    Database(string t_dbName);
     ~Database();
     
     string getDBName();
     
-    void useTable(string curTableName);
+    void useTable(string t_curTableName);
     vector<string> showTables();
     
-    void createTable(string tableName, string primaryKey, Header head);
-    void removeTable(string tableName);
+    void createTable(string t_tableName, string t_primaryKey, Header t_head);
+    void removeTable(string t_tableName);
 };
 
 #endif /* Database_hpp */

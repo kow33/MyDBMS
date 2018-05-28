@@ -18,18 +18,18 @@
 using namespace std;
 
 struct Column {
-    string _colName;
-    DBType _colType;
+    string colName;
+    DBType colType;
     
     Column() {}
-    Column(string colName) : _colName(colName) {}
-    Column(const Column& col) : _colName(col._colName), _colType(col._colType) {}
+    Column(string t_colName) : colName(t_colName) {}
+    Column(const Column& t_col) : colName(t_col.colName), colType(t_col.colType) {}
     
-    void setColTypeFromString(string colType);
+    void setColTypeFromString(string t_colType);
     string getStringFromColType();
     
-    bool operator==(const Column& col);
-    bool operator!=(const Column& col);
+    bool operator==(const Column& t_col);
+    bool operator!=(const Column& t_col);
 };
 
 #endif /* Column_hpp */

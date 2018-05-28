@@ -8,4 +8,4 @@
 
 #include <string>
 
-std::string databasePath = "/Users/mihailkocetkov/C++/MySUBD/MyDBMS/Databases/";
+std::string database_path = "/Users/mihailkocetkov/C++/MySUBD/MyDBMS/Databases/";

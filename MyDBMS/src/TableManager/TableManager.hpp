@@ -19,32 +19,32 @@
 
 using namespace std;
 
-extern string databasePath;
+extern string database_path;
 
 class TableManager {
-    DBTable *_curTable;
+    DBTable *m_curTable;
     
-    TableManager(const TableManager &tm) {}
-    TableManager(TableManager &&tm) {}
+    TableManager(const TableManager &t_tm) = delete;
+    TableManager(TableManager &&t_tm) = delete;
 public:
     TableManager();
-    TableManager(DBTable *curTableName);
+    TableManager(DBTable *t_curTableName);
     ~TableManager();
     
     string getCurTableName();
     vector<string> getCurTableColNames();
     
-    void setCurTable(DBTable *curTable);
+    void setCurTable(DBTable *t_curTable);
     bool isCurTableSet();
-    void saveTable(string dbName);
+    void saveTable(string t_dbName);
     
     vector<string> select();
-    vector<string> selectWhere(string colName, string equalTo);
-    vector<string> selectColumn(string colName);
+    vector<string> selectWhere(string t_colName, string t_equalTo);
+    vector<string> selectColumn(string t_colName);
     
-    void insertRow(vector<string> row);
+    void insertRow(vector<string> t_row);
     void deleteRows();
-    void deleteRowsWhere(string colName, string equalTo);
+    void deleteRowsWhere(string t_colName, string t_equalTo);
 };
 
 #endif /* TableManager_hpp */

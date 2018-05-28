@@ -20,45 +20,45 @@ using namespace std;
 class DBDate {
     
     // MARK: Date Properties
-    int _day;
-    int _month;
-    int _year;
-    static const int _arrDaysNotLeap[13];
-    static const int _arrDaysLeap[13];
+    int m_day;
+    int m_month;
+    int m_year;
+    static const int m_arrDaysNotLeap[13];
+    static const int m_arrDaysLeap[13];
     
     
 public:
     
     // MARK: Date Init
-    DBDate() : _day(0), _month(0), _year(0){};
-    DBDate(int day, int month, int year) : _day(day), _month(month), _year(year){};
-    DBDate(string date);
-    DBDate(const DBDate& date) : _day(date._day), _month(date._month), _year(date._year){};
+    DBDate() : m_day(0), m_month(0), m_year(0) {};
+    DBDate(int t_day, int t_month, int t_year) : m_day(t_day), m_month(t_month), m_year(t_year) {};
+    DBDate(string t_date);
+    DBDate(const DBDate &t_date) : m_day(t_date.m_day), m_month(t_date.m_month), m_year(t_date.m_year) {};
     
     // MARK: Date Methods
     int getDay();
     int getMonth();
     int getYear();
     bool isLeapYear();
-    static bool isLeapYear(int year);
+    static bool isLeapYear(int t_year);
     int getDaysInMonth();
-    static int getDaysInMonth(int month, int year);
+    static int getDaysInMonth(int t_month, int t_year);
     int getDaysForNowInCurYear();
     string dateToString();
-    static string dateToString(const DBDate& date);
+    static string dateToString(const DBDate &t_date);
     
     // MARK: Date Operators
-    bool operator==(const DBDate& date);
-    bool operator!=(const DBDate& date);
-    bool operator<(const DBDate& date);
-    bool operator>(const DBDate& date);
-    bool operator<=(const DBDate& date);
-    bool operator>=(const DBDate& date);
-    DBDate &operator=(const DBDate& date);
-    DBDate &operator+=(int days);
-    DBDate &operator-=(int days);
-    int operator-(const DBDate& date);
-    friend ostream &operator<<(ostream &out, const DBDate& date);
+    bool operator==(const DBDate& t_date);
+    bool operator!=(const DBDate& t_date);
+    bool operator<(const DBDate& t_date);
+    bool operator>(const DBDate& t_date);
+    bool operator<=(const DBDate& t_date);
+    bool operator>=(const DBDate& t_date);
+    DBDate &operator=(const DBDate& t_date);
+    DBDate &operator+=(int t_days);
+    DBDate &operator-=(int t_days);
+    int operator-(const DBDate& t_date);
+    friend ostream &operator<<(ostream &t_out, const DBDate& t_date);
 };
 
 #endif /* DBDate_hpp */
