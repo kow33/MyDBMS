@@ -78,7 +78,6 @@ vector<string> TableManager::select() {
     
     if (m_curTable->size() == 0) {
         throw string("No data in table");
-        return selectedRows;
     }
     
     Header tableHead = m_curTable->getHead();
@@ -139,7 +138,6 @@ vector<string> TableManager::selectWhere(string t_colName, string t_equalTo) {
     
     if (!isRealCol) {
         throw string("column with this name not exist");
-        return selectedRows;
     }
     
     void *p_equalTo = nullptr;
@@ -164,7 +162,6 @@ vector<string> TableManager::selectWhere(string t_colName, string t_equalTo) {
     
     if (tempSelectedRows.size() == 0) {
         throw string("no row with this parameter");
-        return selectedRows;
     }
     
     for (int i = 0; i < tempSelectedRows.size(); i++) {
@@ -219,7 +216,6 @@ vector<string> TableManager::selectColumn(string t_colName) {
     
     if (colType == DBType::Null) {
         throw string("column with this name not exist");
-        return selectedElems;
     }
     
     vector<void*> tempColumn = m_curTable->getColumn(t_colName);
@@ -251,7 +247,6 @@ void TableManager::insertRow(vector<string> t_row) {
     
     if (t_row.size() != tableHead.size()) {
         throw string("incorrect number of row elements");
-        return;
     }
     
     vector<void*> tempRow;

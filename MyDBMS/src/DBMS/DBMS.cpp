@@ -264,7 +264,6 @@ vector<string> DBMS::showDBs() {
     vector<string> dbNameList;
     if (m_dbList.size() == 0) {
         throw string("No databases yet");
-        return dbNameList;
     }
     for (auto temp : m_dbList) {
         dbNameList.push_back(temp.first);
@@ -276,11 +275,9 @@ vector<string> DBMS::showDBs() {
 void DBMS::useDB(string t_dbName) {
     if (m_dbList.find(t_dbName) == m_dbList.end()) {
         throw string("database with this name not exist");
-        return;
     }
     if (m_curDB != nullptr && m_curDB->getDBName() == t_dbName) {
         throw string("database with this name already in use");
-        return;
     }
     m_curDB = m_dbList[t_dbName];
 }
@@ -288,7 +285,6 @@ void DBMS::useDB(string t_dbName) {
 void DBMS::createDB(string t_dbName) {
     if (m_dbList.find(t_dbName) != m_dbList.end()) {
         throw string("database with this name alredy exist");
-        return;
     }
     m_dbList.insert(pair<string, Database*>(t_dbName, new Database(t_dbName)));
     
@@ -304,7 +300,6 @@ void DBMS::createDB(string t_dbName) {
 void DBMS::deleteDB(string t_dbName) {
     if (m_dbList.find(t_dbName) == m_dbList.end()) {
         throw string("database with this name not exist");
-        return;
     }
     if (m_curDB != nullptr && m_curDB->getDBName() == t_dbName) {
         m_curDB = nullptr;

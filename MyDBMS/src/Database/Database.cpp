@@ -30,11 +30,9 @@ string Database::getDBName() {
 void Database::useTable(string t_curTableName) {
     if (m_tables.find(t_curTableName) == m_tables.end()) {
         throw string("table with this name not exist");
-        return;
     }
     if (tm.isCurTableSet() && tm.getCurTableName() == t_curTableName) {
         throw string("table with this name already in use");
-        return;
     }
     if (tm.isCurTableSet()) {
         tm.saveTable(m_dbName);
@@ -46,7 +44,6 @@ vector<string> Database::showTables() {
     vector<string> tableNameList;
     if (m_tables.size() == 0) {
         throw string("No tables yet");
-        return tableNameList;
     }
     
     for (auto temp : m_tables) {
@@ -59,7 +56,6 @@ vector<string> Database::showTables() {
 void Database::createTable(string t_tableName, string t_primaryKey, Header t_head) {
     if (m_tables.find(t_tableName) != m_tables.end()) {
         throw string("table with this name already exist");
-        return;
     }
     m_tables.insert(pair<string, DBTable*>(t_tableName, new DBTable(t_tableName, t_primaryKey, t_head)));
     writeTableListFile();
@@ -68,7 +64,6 @@ void Database::createTable(string t_tableName, string t_primaryKey, Header t_hea
 void Database::removeTable(string t_tableName) {
     if (m_tables.find(t_tableName) == m_tables.end()) {
         throw string("table with this name not exist");
-        return;
     }
     if (tm.getCurTableName() == t_tableName) {
         tm.setCurTable(nullptr);
