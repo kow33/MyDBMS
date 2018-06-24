@@ -15,6 +15,7 @@
 #include <string>
 #include <fstream>
 #include <iomanip>
+#include <queue>
 
 #include "Database.hpp"
 
@@ -31,6 +32,7 @@ public:
     ~DBMS();
     
     void run();
+    void test();
     
     void readDBs();
     void saveDBs();

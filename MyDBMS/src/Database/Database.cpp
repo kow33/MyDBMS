@@ -17,6 +17,7 @@ Database::~Database() {
     if (tm.isCurTableSet()) {
         tm.saveTable(m_dbName);
     }
+    
     for (auto temp : m_tables) {
         delete temp.second;
     }
@@ -59,13 +60,19 @@ void Database::createTable(string t_tableName, string t_primaryKey, Header t_hea
     }
     m_tables.insert(pair<string, DBTable*>(t_tableName, new DBTable(t_tableName, t_primaryKey, t_head)));
     writeTableListFile();
+    
+    string command = "touch ";
+    command += database_path + m_dbName + "/";
+    command += t_tableName + ".csv";
+    system(command.c_str());
 }
 
 void Database::removeTable(string t_tableName) {
     if (m_tables.find(t_tableName) == m_tables.end()) {
         throw string("table with this name not exist");
     }
-    if (tm.getCurTableName() == t_tableName) {
+    
+    if (tm.isCurTableSet() && tm.getCurTableName() == t_tableName) {
         tm.setCurTable(nullptr);
     }
     delete m_tables[t_tableName];

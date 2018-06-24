@@ -11,6 +11,7 @@
 int main(int argc, const char * argv[]) {
     DBMS dbms;
     dbms.run();
+//    dbms.test();
     
     return 0;
 }

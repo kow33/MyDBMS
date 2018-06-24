@@ -454,3 +454,393 @@ void drawTable(vector<string> t_header, vector<string> t_data, ios_base &t_orien
     
     drawTable(t_header, splitedData);
 }
+
+void DBMS::test() {
+    vector<queue<string>> commands;
+    
+    commands.emplace_back(queue<string>());
+    commands.back().push("\\h");
+    
+    // command 1
+    commands.emplace_back(queue<string>());
+    commands.back().push("1");
+    
+    //errors
+    commands.emplace_back(queue<string>());
+    commands.back().push("666");
+    
+    //command 3
+    commands.emplace_back(queue<string>());
+    commands.back().push("3");
+    commands.back().push("test");
+    
+    commands.emplace_back(queue<string>());
+    commands.back().push("3");
+    commands.back().push("_test");
+    
+    // command 1
+    commands.emplace_back(queue<string>());
+    commands.back().push("1");
+    
+    //command 4
+    commands.emplace_back(queue<string>());
+    commands.back().push("4");
+    commands.back().push("_test");
+    
+    commands.emplace_back(queue<string>());
+    commands.back().push("4");
+    commands.back().push("test3");
+    
+    // command 1
+    commands.emplace_back(queue<string>());
+    commands.back().push("1");
+    
+    //command 2
+    commands.emplace_back(queue<string>());
+    commands.back().push("2");
+    commands.back().push("_test_");
+    
+    commands.emplace_back(queue<string>());
+    commands.back().push("2");
+    commands.back().push("test");
+    
+    //command 5
+    commands.emplace_back(queue<string>());
+    commands.back().push("5");
+    
+    //errors
+    commands.emplace_back(queue<string>());
+    commands.back().push("100");
+    
+    // command 7
+    commands.emplace_back(queue<string>());
+    commands.back().push("7");
+    commands.back().push("Books");
+    commands.back().push("3");
+    commands.back().push("Test");
+    commands.back().push("Int");
+    commands.back().push("Column");
+    commands.back().push("String");
+    commands.back().push("Example");
+    commands.back().push("Date");
+    commands.back().push("Test");
+    
+    commands.emplace_back(queue<string>());
+    commands.back().push("7");
+    commands.back().push("test_table");
+    commands.back().push("3");
+    commands.back().push("Test");
+    commands.back().push("Int");
+    commands.back().push("Column");
+    commands.back().push("String");
+    commands.back().push("Example");
+    commands.back().push("Date");
+    commands.back().push("Test");
+    
+    //command 5
+    commands.emplace_back(queue<string>());
+    commands.back().push("5");
+    
+    //command 8
+    commands.emplace_back(queue<string>());
+    commands.back().push("8");
+    commands.back().push("Boo");
+    
+    commands.emplace_back(queue<string>());
+    commands.back().push("8");
+    commands.back().push("test_table");
+    
+    //command 5
+    commands.emplace_back(queue<string>());
+    commands.back().push("5");
+    
+    //command 6
+    commands.emplace_back(queue<string>());
+    commands.back().push("6");
+    commands.back().push("Book");
+    
+    commands.emplace_back(queue<string>());
+    commands.back().push("6");
+    commands.back().push("Books");
+    
+    // command 9
+    commands.emplace_back(queue<string>());
+    commands.back().push("9");
+    
+    // command 10
+    commands.emplace_back(queue<string>());
+    commands.back().push("10");
+    commands.back().push("Book");
+    commands.back().push("Linal");
+    
+    commands.emplace_back(queue<string>());
+    commands.back().push("10");
+    commands.back().push("BookID");
+    commands.back().push("14");
+    
+    commands.emplace_back(queue<string>());
+    commands.back().push("10");
+    commands.back().push("Number");
+    commands.back().push("0");
+    
+    // command 11
+    commands.emplace_back(queue<string>());
+    commands.back().push("11");
+    commands.back().push("ID");
+    
+    commands.emplace_back(queue<string>());
+    commands.back().push("11");
+    commands.back().push("Title");
+    
+    // command 12
+    commands.emplace_back(queue<string>());
+    commands.back().push("12");
+    commands.back().push("100");
+    commands.back().push("Pushkin");
+    commands.back().push("EvgenyOnegin");
+    commands.back().push("5");
+    commands.back().push("3");
+    
+    // command 9
+    commands.emplace_back(queue<string>());
+    commands.back().push("9");
+    
+    // command 14
+    commands.emplace_back(queue<string>());
+    commands.back().push("14");
+    commands.back().push("Books");
+    commands.back().push("Linal");
+    
+    commands.emplace_back(queue<string>());
+    commands.back().push("14");
+    commands.back().push("Number");
+    commands.back().push("0");
+    
+    // command 13
+    commands.emplace_back(queue<string>());
+    commands.back().push("13");
+    
+    // command 9
+    commands.emplace_back(queue<string>());
+    commands.back().push("9");
+    
+    commands.emplace_back(queue<string>());
+    commands.back().push("\\q");
+    
+    for (auto & command : commands) {
+        string strAns = command.front();
+        command.pop();
+        int ans;
+        
+        cout << ">";
+        if (m_curDB != nullptr) {
+            cout << " " << m_curDB->getDBName();
+        }
+        if (m_curDB != nullptr && m_curDB->tm.isCurTableSet()) {
+            cout << "." << m_curDB->tm.getCurTableName();
+        }
+        cout << " " << strAns << endl;
+        
+        if (strAns == "\\h") {
+            printManualTable();
+            continue;
+        }
+        
+        if (strAns == "\\q") {
+            cout << "Bye" << endl;
+            continue;
+        }
+        
+        ans = stoi(strAns);
+        if (ans == 1) {
+            try {
+                vector<string> dbList = showDBs();
+                cout << "Databases:" << endl;
+                drawTable(vector<string>(), dbList, left, true);
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans == 2) {
+            string dbName = command.front();
+            command.pop();
+            cout << "Enter name of database: " << dbName << endl;
+            try {
+                useDB(dbName);
+                cout << "Success!" << endl;
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans == 3) {
+            string dbName = command.front();
+            command.pop();
+            cout << "Enter name of database: " << dbName << endl;
+            try {
+                createDB(dbName);
+                cout << "Database with name " << dbName << " created!" << endl;
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans == 4) {
+            string dbName = command.front();
+            command.pop();
+            cout << "Enter name of database: " << dbName << endl;
+            try {
+                deleteDB(dbName);
+                cout << "Database with name " << dbName << " deleted!" << endl;
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans > 4 && m_curDB == nullptr) {
+            cerr << "Please, take database in use" << endl;
+        } else if (ans == 5) {
+            try {
+                vector<string> tableList = m_curDB->showTables();
+                cout << "Tables: " << endl;
+                drawTable(vector<string>(), tableList, left, true);
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans == 6) {
+            string curTableName = command.front();
+            command.pop();
+            cout << "Enter table name: " << curTableName << endl;
+            try {
+                m_curDB->useTable(curTableName);
+                cout << "Success!" << endl;
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans == 7) {
+            string tableName = command.front();
+            command.pop();
+            int countOfCols = stoi(command.front());
+            command.pop();
+            string primaryKey;
+            Header head;
+            
+            cout << "Enter table name: " << tableName << endl;
+            
+            cout << "Enter count of columns in table: " << countOfCols << endl;
+            
+            cout << "Enter list of column headers: " << endl;
+            for (int i = 0; i < countOfCols; i++) {
+                Column col;
+                string colType;
+                cout << "Column " << i + 1 << endl;
+                col.colName = command.front();
+                command.pop();
+                cout << "Enter column name: " << col.colName << endl;
+                colType = command.front();
+                command.pop();
+                cout << "Enter column type(Int, Double, String, Date): " << colType << endl;
+                col.setColTypeFromString(colType);
+                head.emplace_back(col);
+            }
+            
+            primaryKey = command.front();
+            command.pop();
+            cout << "Enter name of primary key: " << primaryKey << endl;
+            
+            try {
+                m_curDB->createTable(tableName, primaryKey, head);
+                cout << "Table with name " << tableName << " created!" << endl;
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans == 8) {
+            string tableName = command.front();
+            command.pop();
+            cout << "Enter table name: " << tableName << endl;
+            try {
+                m_curDB->removeTable(tableName);
+                cout << "Table with name " << tableName << " deleted!" << endl;
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans > 8 && !m_curDB->tm.isCurTableSet()) {
+            cerr << "Please, take table in use" << endl;
+        } else if (ans == 9) {
+            try {
+                vector<string> tableRows = m_curDB->tm.select();
+                cout << "Table " << m_curDB->tm.getCurTableName() << ":" << endl;
+                vector<string> colNameList = m_curDB->tm.getCurTableColNames();
+                
+                drawTable(colNameList, tableRows);
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans == 10) {
+            string colName = command.front();
+            command.pop();
+            string equalTo = command.front();
+            command.pop();
+            
+            cout << "Condition: what should be the value in the column name to satisfy" << endl;
+            cout << "Enter column name: " << colName << endl;
+            cout << "Enter equal value: " << equalTo << endl;
+            
+            try {
+                vector<string> colNameList = m_curDB->tm.getCurTableColNames();
+                vector<string> tableRows = m_curDB->tm.selectWhere(colName, equalTo);
+                drawTable(colNameList, tableRows);
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans == 11) {
+            string colName = command.front();
+            command.pop();
+            
+            cout << "Enter column name: " << colName << endl;
+            
+            vector<string> nameOfCol;
+            nameOfCol.push_back(colName);
+            try {
+                vector<string> nameOfCol;
+                nameOfCol.push_back(colName);
+                vector<string> column = m_curDB->tm.selectColumn(colName);
+                drawTable(nameOfCol, column);
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+            
+        } else if (ans == 12) {
+            vector<string> row;
+            vector<string> colNameList = m_curDB->tm.getCurTableColNames();
+            cout << "Enter data:" << endl;
+            for (int i = 0; i < colNameList.size(); i++) {
+                string answer = command.front();
+                command.pop();
+                cout << "Enter " << colNameList[i] << ": " << answer << endl;
+                row.emplace_back(answer);
+            }
+            
+            try {
+                m_curDB->tm.insertRow(row);
+                cout << "Success!" << endl;
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        } else if (ans == 13) {
+            m_curDB->tm.deleteRows();
+            cout << "Success!" << endl;
+        } else if (ans == 14) {
+            string colName = command.front();
+            command.pop();
+            string equalTo = command.front();
+            command.pop();
+            
+            cout << "Condition: what should be the value in the column name to satisfy" << endl;
+            cout << "Enter column name: " << colName << endl;
+            cout << "Enter equal value: " << equalTo << endl;
+            
+            try {
+                m_curDB->tm.deleteRowsWhere(colName, equalTo);
+                cout << "Success!" << endl;
+            } catch (string err) {
+                cerr << "Error: " << err << endl;
+            }
+        }
+        
+        cout << endl;
+    }
+}

@@ -65,10 +65,12 @@ void TableManager::saveTable(string t_dbName) {
     }
     file << endl;
     
-    vector<string> stringTable = select();
-    for (auto row : stringTable) {
-        file << row << endl;
-    }
+    try {
+        vector<string> stringTable = select();
+        for (auto row : stringTable) {
+            file << row << endl;
+        }
+    } catch (string err) {}
     
     file.close();
 }
